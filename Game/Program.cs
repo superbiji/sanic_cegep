@@ -19,13 +19,14 @@ namespace Game
 		static RenderWindow window;
 		static Sprite sanic;
 		static Vector2f sanic_sped = new Vector2f(0, 0);
+		static Vector2f VITESSE_X = new Vector2f(2, 0);
+		static Vector2f VITESSE_Y = new Vector2f(0, -25);
 
 		static void Main()
 		{
 			window = new RenderWindow(new VideoMode(800, 600), "Untitled");
 			window.SetFramerateLimit(60);
 			window.Closed += new EventHandler(OnClose);
-			window.KeyPressed += new EventHandler<KeyEventArgs>(KeyPressed);
 
 			Vector2f GRAVITY = new Vector2f(0, 1);
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
@@ -36,6 +37,17 @@ namespace Game
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
 				{
 					sanic_sped.X /= 1.1f;
+				}
+				else
+				{
+					if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+					{
+						sanic_sped -= VITESSE_X;
+					}
+					if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+					{
+						sanic_sped += VITESSE_X;
+					}
 				}
 				if (sanic.Position.X < 0)
 				{
@@ -53,6 +65,13 @@ namespace Game
 				}
 				else
 				{
+					if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+					{
+						if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
+						{
+							sanic_sped += VITESSE_Y;
+						}
+					}
 					sanic.Position = new Vector2f(sanic.Position.X, window.Size.Y - sanic.GetGlobalBounds().Height + 1);
 					sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				}
@@ -62,28 +81,6 @@ namespace Game
 				window.Clear(Color.Green);
 				window.Draw(sanic);
 				window.Display();
-			}
-		}
-
-		static void KeyPressed(object sender, KeyEventArgs e)
-		{
-			Vector2f VITESSE_X = new Vector2f(2, 0);
-			Vector2f VITESSE_Y = new Vector2f(0, -25);
-			
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
-			{
-				sanic_sped -= VITESSE_X;
-			}
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
-			{
-				sanic_sped += VITESSE_X;
-			}
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
-			{
-				if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
-				{
-					sanic_sped += VITESSE_Y;
-				}
 			}
 		}
 
