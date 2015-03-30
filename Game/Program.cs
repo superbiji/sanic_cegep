@@ -13,6 +13,7 @@ namespace Game
 {
 	static class Program
 	{
+		static SoundBuffer sb;
 		static void Main()
 		{
 			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
@@ -20,7 +21,11 @@ namespace Game
 			window.SetFramerateLimit(60);
 
 			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+			teme.Volume = 10;
 			teme.Loop = true;
+			Sound jamp = new Sound();
+			sb = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
+			jamp.SoundBuffer = sb;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
@@ -70,6 +75,7 @@ namespace Game
 					{
 						if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
 						{
+							jamp.Play();
 							sanic_sped += VITESSE_Y;
 						}
 					}
@@ -88,6 +94,7 @@ namespace Game
 
 		static void OnClose(object sender, EventArgs e)
 		{
+			
 			RenderWindow window = (RenderWindow)sender;
 			window.Close();
 		}
