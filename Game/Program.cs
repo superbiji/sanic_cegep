@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using SFML;
+﻿using SFML.Audio;
 using SFML.Graphics;
-using SFML.Audio;
-using SFML.Window;
 using SFML.System;
+using SFML.Window;
+using System;
 
 namespace Game
 {
 	static class Program
 	{
-		static SoundBuffer sb;
 		static void Main()
 		{
 			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
@@ -24,8 +18,7 @@ namespace Game
 			teme.Volume = 10;
 			teme.Loop = true;
 			Sound jamp = new Sound();
-			sb = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
-			jamp.SoundBuffer = sb;
+			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav"); ;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
@@ -94,7 +87,6 @@ namespace Game
 
 		static void OnClose(object sender, EventArgs e)
 		{
-			
 			RenderWindow window = (RenderWindow)sender;
 			window.Close();
 		}
