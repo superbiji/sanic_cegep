@@ -36,7 +36,8 @@ namespace Game
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
 				{
-					sanic_sped.X /= 1.1f;
+					//sanic_sped.X /= 1.1f;
+					sanic_sped += VITESSE_X;
 				}
 				else
 				{
