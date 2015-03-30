@@ -25,7 +25,7 @@ namespace Game
 			while (window.IsOpen)
 			{
 				window.DispatchEvents();
-				window.Clear();
+				window.Clear(Color.Yellow);
 				//window.Draw(Drawable);
 				window.Display();
 			}
