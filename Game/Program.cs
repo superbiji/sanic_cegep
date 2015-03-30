@@ -58,7 +58,7 @@ namespace Game
 				sanic.Position += sanic_sped;
 
 				window.DispatchEvents();
-				window.Clear(Color.Yellow);
+				window.Clear(Color.Green);
 				window.Draw(sanic);
 				window.Display();
 			}
