@@ -24,20 +24,21 @@ namespace Game
 
 		static void Main()
 		{
-			window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!");
+			window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
 			window.SetFramerateLimit(60);
 			window.Closed += new EventHandler(OnClose);
 
 			Vector2f GRAVITY = new Vector2f(0, 1);
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
-            Texture Background = new Texture(@"..\..\Ressources\Background.jpg");
+			Sprite background = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
+			//background.;
+
 			while (window.IsOpen)
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
 				{
-					//sanic_sped.X /= 1.1f;
-					sanic_sped += VITESSE_X;
+					sanic_sped.X /= 1.1f;
 				}
 				else
 				{
@@ -80,6 +81,7 @@ namespace Game
 
 				window.DispatchEvents();
 				window.Clear(Color.Green);
+				window.Draw(background);
 				window.Draw(sanic);
 				window.Display();
 			}
