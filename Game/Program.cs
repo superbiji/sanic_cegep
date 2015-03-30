@@ -24,6 +24,7 @@ namespace Game
 
 		static void Main()
 		{
+            
 			window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!");
 			window.SetFramerateLimit(60);
 			window.Closed += new EventHandler(OnClose);
