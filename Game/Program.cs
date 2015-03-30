@@ -31,7 +31,7 @@ namespace Game
 			Vector2f GRAVITY = new Vector2f(0, 1);
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
-
+            Texture Background = new Texture(@"..\..\Ressources\Background.jpg");
 			while (window.IsOpen)
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
