@@ -92,7 +92,7 @@
     </Content>
     <Content Include="Ressources\Background.jpg" />
     <Content Include="Ressources\sanic.png" />
-    <Content Include="Ressources\SanicMusic.mp3" />
+    <Content Include="Ressources\SanicMusic.wav" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

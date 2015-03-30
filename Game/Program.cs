@@ -5,35 +5,34 @@ using System.Threading.Tasks;
 
 using SFML;
 using SFML.Graphics;
+using SFML.Audio;
 using SFML.Window;
 using SFML.System;
-
-//DICK_BUTT
-//RAINBOW PIECE OF FUCK
-//TEST
 
 namespace Game
 {
 	static class Program
 	{
-		static RenderWindow window;
-		static Sprite sanic;
-		static Vector2f sanic_sped = new Vector2f(0, 0);
-		static Vector2f VITESSE_X = new Vector2f(2, 0);
-		static Vector2f VITESSE_Y = new Vector2f(0, -25);
-
 		static void Main()
 		{
-			window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
-			window.SetFramerateLimit(60);
+			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
+			window.SetFramerateLimit(60);
 
-			Vector2f GRAVITY = new Vector2f(0, 1);
-			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
+			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+			teme.Loop = true;
+
+			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
+			Vector2f VITESSE_X = new Vector2f(2, 0);
+			Vector2f VITESSE_Y = new Vector2f(0, -25);
+			Vector2f GRAVITY = new Vector2f(0, 1);
+			Vector2f sanic_sped = new Vector2f(0, 0);
+
+			teme.Play();
 			while (window.IsOpen)
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
@@ -80,7 +79,7 @@ namespace Game
 				sanic.Position += sanic_sped;
 
 				window.DispatchEvents();
-				window.Clear(Color.Green);
+				window.Clear();
 				window.Draw(background);
 				window.Draw(sanic);
 				window.Display();
