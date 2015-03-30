@@ -53,6 +53,7 @@ namespace Game
 				}
 				else
 				{
+					sanic.Position = new Vector2f(sanic.Position.X, window.Size.Y - sanic.GetGlobalBounds().Height + 1);
 					sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				}
 				sanic.Position += sanic_sped;
