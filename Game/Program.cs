@@ -59,7 +59,7 @@ namespace Game
 				else if (sanic.Position.X + sanic.GetGlobalBounds().Width > window.Size.X)
 				{
 					//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
-					sanic_sped.X = -Math.Abs(sanic_sped.X); ;
+					sanic_sped.X = -Math.Abs(sanic_sped.X);
 				}
 				if (sanic.Position.Y + sanic.GetGlobalBounds().Height < window.Size.Y)
 				{
