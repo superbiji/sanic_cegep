@@ -26,6 +26,7 @@ namespace Game
 			ren.Loop = true;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
+			//sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
@@ -38,6 +39,10 @@ namespace Game
             sanicQuote.Play();
 			while (window.IsOpen)
 			{
+				if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
+				{
+					sanicQuote.Play();
+				}
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
 				{
 					sanic_sped.X /= 1.1f;
@@ -66,9 +71,11 @@ namespace Game
 				if (sanic.Position.Y + sanic.GetGlobalBounds().Height < window.Size.Y)
 				{
 					sanic_sped += GRAVITY;
+					sanic.Rotation += 7;
 				}
 				else
 				{
+					sanic.Rotation = 0;
 					if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
 					{
 						if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
