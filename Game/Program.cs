@@ -1,50 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using SFML;
+﻿using SFML.Audio;
 using SFML.Graphics;
-using SFML.Window;
 using SFML.System;
-using System.Diagnostics;
-
-//DICK_BUTT
-//RAINBOW PIECE OF FUCK
-//TEST
+using SFML.Window;
+using System;
 
 namespace Game
 {
 	static class Program
 	{
-		static RenderWindow window;
-		static Sprite sanic;
-		static Sprite background;
-		static Vector2f sanic_sped = new Vector2f(0, 0);
-		static Vector2f VITESSE_X = new Vector2f(2, 0);
-		static Vector2f VITESSE_Y = new Vector2f(0, -25);
-
 		static void Main()
 		{
-			try
-			{
-				window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
-				sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
-				background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-			}
-			catch (Exception ex)
-			{
-				Trace.TraceError("Error : " + ex);
-				window.Close();
-			}
-			
-			window.SetFramerateLimit(60);
+			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
+			window.SetFramerateLimit(60);
 
-			Vector2f GRAVITY = new Vector2f(0, 1);
+			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+			teme.Volume = 10;
+			teme.Loop = true;
+            Sound sanicQuote = new Sound();
+            sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
+			Sound jamp = new Sound();
+			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav"); ;
+
+			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
+			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
+			Vector2f VITESSE_X = new Vector2f(2, 0);
+			Vector2f VITESSE_Y = new Vector2f(0, -25);
+			Vector2f GRAVITY = new Vector2f(0, 1);
+			Vector2f sanic_sped = new Vector2f(0, 0);
+
+			teme.Play();
+            sanicQuote.Play();
 			while (window.IsOpen)
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
@@ -82,6 +71,7 @@ namespace Game
 					{
 						if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
 						{
+							jamp.Play();
 							sanic_sped += VITESSE_Y;
 						}
 					}
@@ -91,7 +81,7 @@ namespace Game
 				sanic.Position += sanic_sped;
 
 				window.DispatchEvents();
-				window.Clear(Color.Green);
+				window.Clear();
 				window.Draw(background);
 				window.Draw(sanic);
 				window.Display();
