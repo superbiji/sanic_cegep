@@ -7,6 +7,7 @@ using SFML;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
+using System.Diagnostics;
 
 //DICK_BUTT
 //RAINBOW PIECE OF FUCK
@@ -18,20 +19,30 @@ namespace Game
 	{
 		static RenderWindow window;
 		static Sprite sanic;
+		static Sprite background;
 		static Vector2f sanic_sped = new Vector2f(0, 0);
 		static Vector2f VITESSE_X = new Vector2f(2, 0);
 		static Vector2f VITESSE_Y = new Vector2f(0, -25);
 
 		static void Main()
 		{
-			window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
+			try
+			{
+				window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
+				sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
+				background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
+			}
+			catch (Exception ex)
+			{
+				Trace.TraceError("Error : " + ex);
+				window.Close();
+			}
+			
 			window.SetFramerateLimit(60);
 			window.Closed += new EventHandler(OnClose);
 
 			Vector2f GRAVITY = new Vector2f(0, 1);
-			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
-			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
 			while (window.IsOpen)
