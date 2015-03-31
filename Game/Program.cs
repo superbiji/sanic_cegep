@@ -20,7 +20,8 @@ namespace Game
             Sound sanicQuote = new Sound();
             sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			Sound jamp = new Sound();
-			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav"); ;
+			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
+			jamp.Volume = 100;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanic.Scale = new Vector2f(0.25f, 0.25f);
