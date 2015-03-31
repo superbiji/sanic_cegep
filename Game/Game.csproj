@@ -109,6 +109,7 @@
     <Content Include="Ressources\sanic.png" />
     <Content Include="Ressources\SanicMusic.wav" />
     <Content Include="Ressources\sanic_jamp.wav" />
+    <Content Include="Ressources\sanic_ren.wav" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

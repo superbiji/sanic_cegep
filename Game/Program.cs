@@ -21,7 +21,9 @@ namespace Game
             sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			Sound jamp = new Sound();
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
-			jamp.Volume = 100;
+			Sound ren = new Sound();
+			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
+			ren.Loop = true;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
@@ -79,6 +81,20 @@ namespace Game
 					sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				}
 				sanic.Position += sanic_sped;
+
+				if ((sanic.Position.Y + sanic.GetGlobalBounds().Height >= window.Size.Y) &&
+					(Math.Round(sanic_sped.X) != 0))
+				{
+					ren.Pitch = 1 + Math.Abs(sanic_sped.X / VITESSE_X.X / 40);
+					if (ren.Status == SoundStatus.Stopped)
+					{
+						ren.Play();
+					}
+				}
+				else
+				{
+					ren.Stop();
+				}
 
 				window.DispatchEvents();
 				window.Clear();
