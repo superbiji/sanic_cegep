@@ -85,7 +85,7 @@ namespace Game
 				if ((sanic.Position.Y + sanic.GetGlobalBounds().Height >= window.Size.Y) &&
 					(Math.Round(sanic_sped.X) != 0))
 				{
-					ren.Pitch = 1 + Math.Abs(sanic_sped.X / VITESSE_X.X / 40);
+					ren.Pitch = 1 + Math.Abs(sanic_sped.X / VITESSE_X.X / 33);
 					if (ren.Status == SoundStatus.Stopped)
 					{
 						ren.Play();
