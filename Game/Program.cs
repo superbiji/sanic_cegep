@@ -17,6 +17,8 @@ namespace Game
 			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 			teme.Volume = 10;
 			teme.Loop = true;
+            Sound sanicQuote = new Sound();
+            sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			Sound jamp = new Sound();
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav"); ;
 
@@ -31,6 +33,7 @@ namespace Game
 			Vector2f sanic_sped = new Vector2f(0, 0);
 
 			teme.Play();
+            sanicQuote.Play();
 			while (window.IsOpen)
 			{
 				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
