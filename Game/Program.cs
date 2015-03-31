@@ -24,7 +24,6 @@ namespace Game
 			jamp.Volume = 100;
 
 			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
-			sanic.Scale = new Vector2f(0.25f, 0.25f);
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
