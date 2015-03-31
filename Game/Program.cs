@@ -17,93 +17,38 @@ namespace Game
 			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 			teme.Volume = 10;
 			teme.Loop = true;
-            Sound sanicQuote = new Sound();
-            sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
-			Sound jamp = new Sound();
-			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
-			Sound ren = new Sound();
-			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
-			ren.Loop = true;
-
-			Sprite sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
-			//sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
+           
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
-			Vector2f VITESSE_X = new Vector2f(2, 0);
-			Vector2f VITESSE_Y = new Vector2f(0, -25);
-			Vector2f GRAVITY = new Vector2f(0, 1);
-			Vector2f sanic_sped = new Vector2f(0, 0);
+			Sanic sanic = new Sanic(window);
 
 			teme.Play();
-            sanicQuote.Play();
+			sanic.Quote();
+
 			while (window.IsOpen)
 			{
+				window.DispatchEvents();
+
+				if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+				{
+					sanic.Move(Direction.Left);
+				}
+				if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+				{
+					sanic.Move(Direction.Right);
+				}
+				if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+				{
+					sanic.Jump();
+				}
 				if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
 				{
-					sanicQuote.Play();
-				}
-				if (!Keyboard.IsKeyPressed(Keyboard.Key.Left) && !(Keyboard.IsKeyPressed(Keyboard.Key.Right)))
-				{
-					sanic_sped.X /= 1.1f;
-				}
-				else
-				{
-					if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
-					{
-						sanic_sped -= VITESSE_X;
-					}
-					if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
-					{
-						sanic_sped += VITESSE_X;
-					}
-				}
-				if (sanic.Position.X < 0)
-				{
-					//sanic.Position = new Vector2f(0, sanic.Position.Y);
-					sanic_sped.X = Math.Abs(sanic_sped.X);
-				}
-				else if (sanic.Position.X + sanic.GetGlobalBounds().Width > window.Size.X)
-				{
-					//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
-					sanic_sped.X = -Math.Abs(sanic_sped.X);
-				}
-				if (sanic.Position.Y + sanic.GetGlobalBounds().Height < window.Size.Y)
-				{
-					sanic_sped += GRAVITY;
-					sanic.Rotation += 7;
-				}
-				else
-				{
-					sanic.Rotation = 0;
-					if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
-					{
-						if (sanic.Position.Y + sanic.GetGlobalBounds().Height > window.Size.Y)
-						{
-							jamp.Play();
-							sanic_sped += VITESSE_Y;
-						}
-					}
-					sanic.Position = new Vector2f(sanic.Position.X, window.Size.Y - sanic.GetGlobalBounds().Height + 1);
-					sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
-				}
-				sanic.Position += sanic_sped;
-
-				if ((sanic.Position.Y + sanic.GetGlobalBounds().Height >= window.Size.Y) &&
-					(Math.Round(sanic_sped.X) != 0))
-				{
-					ren.Pitch = 1 + Math.Abs(sanic_sped.X / VITESSE_X.X / 33);
-					if (ren.Status == SoundStatus.Stopped)
-					{
-						ren.Play();
-					}
-				}
-				else
-				{
-					ren.Stop();
+					sanic.Quote();
 				}
 
-				window.DispatchEvents();
+				sanic.Update();
+
 				window.Clear();
 				window.Draw(background);
 				window.Draw(sanic);
