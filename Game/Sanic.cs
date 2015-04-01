@@ -13,6 +13,7 @@ namespace Game
 	public class Sanic : Drawable
 	{
 		public Vector2f Position = new Vector2f(0, 0);
+		public Vector2f Scale = new Vector2f(1, 1);
 		public float Rotation = 0;
 
 		private Sprite currentSprite;
@@ -53,8 +54,9 @@ namespace Game
 
 			ren.Loop = true;
 
+
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
-			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+			sanicBall.Origin = new Vector2f(125, 90);
 			currentSprite = sanicBall;
 		}
 
@@ -164,7 +166,7 @@ namespace Game
 			//Flip sprite
 			if (IsMoving())
 			{
-				currentSprite.Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
+				Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
 			}
 			
 			Position += sanic_sped;
@@ -178,6 +180,7 @@ namespace Game
 		{
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
+			currentSprite.Scale = Scale;
 		}
 
 		public void Draw(RenderTarget target, RenderStates states)
