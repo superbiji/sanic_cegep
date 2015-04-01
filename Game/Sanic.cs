@@ -12,29 +12,22 @@ namespace Game
 {
 	public class Sanic : Drawable
 	{
+		public Vector2f Position = new Vector2f(0, 0);
+		public float Rotation = 0;
+
+		private Sprite currentSprite;
+		private bool asMoved = false;
+		private Vector2f sanic_sped = new Vector2f(0, 0);
+
 		private readonly RenderWindow window;
-		private readonly Sprite currentSprite;
 		private readonly Sprite sanic;
+		private readonly Sprite sanicBall;
 		private readonly Sound sanicQuote = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
 		private readonly Vector2f VITESSE_X = new Vector2f(2, 0);
 		private readonly Vector2f VITESSE_Y = new Vector2f(0, -25);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
-		private bool asMoved = false;
-		private Vector2f sanic_sped = new Vector2f(0, 0);
-
-		public Vector2f Position
-		{
-			get
-			{
-				return currentSprite.Position - currentSprite.Origin;
-			}
-			set
-			{
-				currentSprite.Position = value + currentSprite.Origin;
-			}
-		}
 
 		public Vector2f Size
 		{
@@ -48,30 +41,21 @@ namespace Game
 			}
 		}
 
-		public float Rotation
-		{
-			get
-			{
-				return currentSprite.Rotation;
-			}
-			set
-			{
-				currentSprite.Rotation = value;
-			}
-		}
-
 		public Sanic(RenderWindow rw)
 		{
 			window = rw;
 
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
+			sanicBall = new Sprite(new Texture(@"..\..\Ressources\sanic_ball.png"));
 			sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
 
 			ren.Loop = true;
-			currentSprite = sanic;
-			currentSprite.Origin = new Vector2f(currentSprite.GetLocalBounds().Width / 2, currentSprite.GetLocalBounds().Height / 2);
+
+			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
+			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+			currentSprite = sanicBall;
 		}
 
 		public void Quote()
@@ -147,6 +131,7 @@ namespace Game
 
 			if (IsGrounded())
 			{
+				currentSprite = sanic;
 				Position = new Vector2f(Position.X, window.Size.Y - Size.Y);
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 
@@ -158,6 +143,7 @@ namespace Game
 			}
 			else
 			{
+				currentSprite = sanicBall;
 				sanic_sped += GRAVITY;
 				Rotation += 2.5f * sanic_sped.X / VITESSE_X.X;
 			}
@@ -182,6 +168,10 @@ namespace Game
 			}
 			
 			Position += sanic_sped;
+
+			currentSprite.Position = Position + currentSprite.Origin;
+			currentSprite.Rotation = Rotation;
+			 
 			asMoved = false;
 		}
 
