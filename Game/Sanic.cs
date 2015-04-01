@@ -169,10 +169,15 @@ namespace Game
 			
 			Position += sanic_sped;
 
-			currentSprite.Position = Position + currentSprite.Origin;
-			currentSprite.Rotation = Rotation;
+			UpdateSprite();
 			 
 			asMoved = false;
+		}
+
+		private void UpdateSprite()
+		{
+			currentSprite.Position = Position + currentSprite.Origin;
+			currentSprite.Rotation = Rotation;
 		}
 
 		public void Draw(RenderTarget target, RenderStates states)
