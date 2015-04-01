@@ -1,6 +1,4 @@
-﻿
-//Jermo
-using SFML.Audio;
+﻿using SFML.Audio;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
