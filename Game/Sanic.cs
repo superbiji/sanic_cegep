@@ -86,7 +86,7 @@ namespace Game
 
 		public bool IsMoving()
 		{
-			return sanic_sped.X != 0;
+			return Math.Round(sanic_sped.X) != 0;
 		}
 
 		public bool isStopped()
@@ -131,7 +131,7 @@ namespace Game
 		{
 			if (!asMoved)
 			{
-				sanic_sped.X = Math.Round(sanic_sped.X) == 0 ? 0 : sanic_sped.X / 1.1f;
+				sanic_sped.X /= 1.1f;
 			}
 
 			if (Position.X < 0)
