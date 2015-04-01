@@ -54,6 +54,7 @@ namespace Game
 
 			ren.Loop = true;
 
+
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			sanicBall.Origin = new Vector2f(125, 90);
 			currentSprite = sanicBall;
