@@ -33,6 +33,7 @@ namespace Game
 			{
 				window.DispatchEvents();
 
+				//TODO: better input manager
 				if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
 				{
 					sanic.Move(Direction.Left);
