@@ -164,7 +164,7 @@ namespace Game
 
 			if (IsGrounded() && IsMoving())
 			{
-				ren.Pitch = 1 + Math.Abs(sanic_sped.X / VITESSE_X.X / 33);
+				ren.Pitch = 1f + Math.Abs(sanic_sped.X) / VITESSE_X.X / 33;
 				if (ren.Status == SoundStatus.Stopped)
 				{
 					ren.Play();
