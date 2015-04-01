@@ -25,7 +25,7 @@ namespace Game
 			Sanic sanic = new Sanic(window);
 			Sanic sanic2 = new Sanic(window);
 			sanic.Position = new Vector2f(window.Size.X / 2, 0);
-			sanic.Position = new Vector2f(0, 0);
+			sanic2.Position = new Vector2f(0, 0);
 
 			teme.Play();
 			sanic.Quote();
