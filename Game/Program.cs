@@ -23,8 +23,7 @@ namespace Game
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
-			Sanic sanic = new Sanic(window);
-			sanic.Position = new Vector2f(window.Size.X / 2, 0);
+			Sanic sanic = new Sanic(window) { Position = new Vector2f(window.Size.X / 2, 0)};
 
 			teme.Play();
 			sanic.Quote();

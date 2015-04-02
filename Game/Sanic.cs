@@ -57,7 +57,7 @@ namespace Game
 
 
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
-			sanicBall.Origin = new Vector2f(125, 90);
+			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
 			currentSprite = sanicBall;
 		}
 
