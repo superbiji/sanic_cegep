@@ -34,11 +34,22 @@ namespace Game
 				window.DispatchEvents();
 
 				//TODO: better input manager
-				if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
+                {
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+                    {
+                        sanic.spen(Direction.Right);
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+                    {
+                        sanic.spen(Direction.Left);
+                    }
+                }
+				else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
 				{
 					sanic.Move(Direction.Left);
 				}
-				if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+				else if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
 				{
 					sanic.Move(Direction.Right);
 				}

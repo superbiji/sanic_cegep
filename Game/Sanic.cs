@@ -17,7 +17,8 @@ namespace Game
 		public float Rotation = 0;
 
 		private Sprite currentSprite;
-		private bool asMoved = false;
+        private bool asMoved = false;
+        private bool isSpenning = false;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
 		private readonly RenderWindow window;
@@ -80,6 +81,24 @@ namespace Game
 			return IsGrounded() && !IsMoving();
 		}
 
+        public void spen(Direction pDirection)
+        {
+            isSpenning = true;
+            switch (pDirection)
+            {
+                case Direction.Left :
+                    Rotation -= 21;
+                    Scale = new Vector2f(-1,1);
+                    break;
+                case Direction.Right :
+                    Rotation += 21;
+                    Scale = new Vector2f(1,1);
+                    break;
+                default:
+                    break;
+            }
+        }
+
 		public void Jump()
 		{
 			if (IsGrounded())
@@ -133,15 +152,22 @@ namespace Game
 
 			if (IsGrounded())
 			{
-				currentSprite = sanic;
 				Position = new Vector2f(Position.X, window.Size.Y - Size.Y);
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
-
-				if (Math.Abs(Rotation) > 180)
-				{
-					Rotation -= Math.Sign(Rotation) * 360;
-				}
-				Rotation /= 1.1f;
+                
+                if (!isSpenning)
+                {
+                    currentSprite = sanic;
+				    if (Math.Abs(Rotation) > 180)
+				    {
+					    Rotation -= Math.Sign(Rotation) * 360;
+				    }
+				    Rotation /= 1.1f;
+                }
+                else
+                {
+                    currentSprite = sanicBall;
+                }
 			}
 			else
 			{
@@ -174,6 +200,7 @@ namespace Game
 			UpdateSprite();
 			 
 			asMoved = false;
+            isSpenning = false;
 		}
 
 		private void UpdateSprite()
