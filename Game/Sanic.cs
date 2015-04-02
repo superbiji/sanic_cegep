@@ -81,22 +81,23 @@ namespace Game
 			return IsGrounded() && !IsMoving();
 		}
 
-        public void spen(Direction pDirection)
+		private int Face()
+		{
+			return sanic_sped.X < 0 ? -1 : 1;
+		}
+
+        public void spen(Action pDirection)
         {
             isSpenning = true;
-            switch (pDirection)
-            {
-                case Direction.Left :
-                    Rotation -= 21;
-                    Scale = new Vector2f(-1,1);
-                    break;
-                case Direction.Right :
-                    Rotation += 21;
-                    Scale = new Vector2f(1,1);
-                    break;
-                default:
-                    break;
-            }
+			switch (pDirection)
+			{
+				case Action.Left:
+					Scale = new Vector2f(-1, 1);
+					break;
+				case Action.Right:
+					Scale = new Vector2f(1, 1);
+					break;
+			}
         }
 
 		public void Jump()
@@ -108,17 +109,17 @@ namespace Game
 			}
 		}
 
-		public void Move(Direction direction)
+		public void Move(Action direction)
 		{
 			switch (direction)
 			{
-				case Direction.Right:
+				case Action.Right:
 					Move(-VITESSE_X);
 					break;
-				case Direction.Left:
+				case Action.Left:
 					Move(VITESSE_X);
 					break;
-				case Direction.Up:
+				case Action.Up:
 					Jump();
 					break;
 				default:
@@ -167,6 +168,7 @@ namespace Game
                 else
                 {
                     currentSprite = sanicBall;
+					Rotation += Face() * 21;
                 }
 			}
 			else
@@ -192,7 +194,7 @@ namespace Game
 			//Flip sprite
 			if (IsMoving())
 			{
-				Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
+				Scale = new Vector2f(Face(), 1);
 			}
 			
 			Position += sanic_sped;

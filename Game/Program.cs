@@ -37,20 +37,20 @@ namespace Game
                 {
                     if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
                     {
-                        sanic.spen(Direction.Right);
+                        sanic.spen(Action.Right);
                     }
                     else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
                     {
-                        sanic.spen(Direction.Left);
+                        sanic.spen(Action.Left);
                     }
                 }
 				else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
 				{
-					sanic.Move(Direction.Left);
+					sanic.Move(Action.Left);
 				}
 				else if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
 				{
-					sanic.Move(Direction.Right);
+					sanic.Move(Action.Right);
 				}
 				if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
 				{
