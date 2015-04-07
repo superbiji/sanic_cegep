@@ -12,9 +12,6 @@ namespace Game
 {
 	public class Sanic : Drawable
 	{
-		private const int DIRECTION_LEFT = -1;
-		private const int DIRECTION_RIGHT = 1;
-
 		private enum State
 		{
 			Standing,
@@ -27,23 +24,7 @@ namespace Game
 		public Vector2f Position = new Vector2f(0, 0);
 		private Vector2f Scale = new Vector2f(1, 1);
 		private float Rotation = 0;
-		private int Direction = DIRECTION_LEFT;
 		private State state = State.Standing;
-
-		private Sprite currentSprite;
-        private float spen_sped = 0f;
-		private Vector2f sanic_sped = new Vector2f(0, 0);
-
-		private readonly RenderWindow window;
-		private readonly Sprite sanic;
-		private readonly Sprite sanicBall;
-		private readonly Sound sanicQuote = new Sound();
-        private readonly Sound spenSound = new Sound();
-		private readonly Sound jamp = new Sound();
-		private readonly Sound ren = new Sound();
-		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
-		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
-
 		public Vector2f Size
 		{
 			get
@@ -56,12 +37,28 @@ namespace Game
 			}
 		}
 
+		private Sprite currentSprite;
+        private float spen_sped = 0f;
+		private Vector2f sanic_sped = new Vector2f(0, 0);
+
+		private readonly RenderWindow window;
+		private readonly Sprite sanic;
+		private readonly Sprite sanicBall;
+		private readonly Sprite sanicDuck;
+		private readonly Sound sanicQuote = new Sound();
+        private readonly Sound spenSound = new Sound();
+		private readonly Sound jamp = new Sound();
+		private readonly Sound ren = new Sound();
+		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
+		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
+
 		public Sanic(RenderWindow rw)
 		{
 			window = rw;
 
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanicBall = new Sprite(new Texture(@"..\..\Ressources\sanic_ball.png"));
+			sanicDuck = new Sprite(new Texture(@"..\..\Ressources\sanicDuck.png"));
 			sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
@@ -73,6 +70,7 @@ namespace Game
 
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+			sanicDuck.Origin = new Vector2f(sanicDuck.GetLocalBounds().Width / 2, sanicDuck.GetLocalBounds().Height / 2);
 
 			stand();
 		}
@@ -142,7 +140,7 @@ namespace Game
 
 		private void duck()
 		{
-			//currentSprite = sanicBall;
+			currentSprite = sanicDuck;
 			ren.Stop();
 			spen_sped = 0;
 			spenSound.Stop();
@@ -156,6 +154,10 @@ namespace Game
 			if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
 			{
 				spin();
+			}
+			else if (!Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			{
+				stand();
 			}
 		}
 
@@ -173,7 +175,10 @@ namespace Game
 		{
 			Rotation += Face() * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
-			spen_sped += 0.3f;
+			if (spen_sped < 60)
+			{
+				spen_sped += 0.3f;
+			}
 			if (!Keyboard.IsKeyPressed(Keyboard.Key.Down))
 			{
 				boost();
