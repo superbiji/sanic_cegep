@@ -322,7 +322,14 @@ namespace Game
 		private void UpdateSprite()
 		{
 			//Flip sprite
-			Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
+			if (sanic_sped.X < 0)
+			{
+				Scale = new Vector2f(-1, 1);
+			}
+			else if (sanic_sped.X > 0)
+			{
+				Scale = new Vector2f(1, 1);
+			}
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;
