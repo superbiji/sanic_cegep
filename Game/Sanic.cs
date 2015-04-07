@@ -176,7 +176,11 @@ namespace Game
 				    {
 					    Rotation -= Math.Sign(Rotation) * 360;
 				    }
-				    Rotation /= 1.1f;
+                    Rotation /= 1.1f;
+                    if (spen_sped > 60)
+                    {
+                        sanic_sped = new Vector2f(Face() * 80, sanic_sped.Y);
+                    }
                     spen_sped = 0;
                     spenSound.Stop();
                 }
