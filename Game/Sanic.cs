@@ -84,7 +84,7 @@ namespace Game
 
 		private int Face()
 		{
-			return sanic_sped.X < 0 ? -1 : 1;
+			return Scale.X < 0 ? -1 : 1;
 		}
 
         public void spen(Action pDirection)
@@ -170,7 +170,7 @@ namespace Game
                 else
                 {
                     currentSprite = sanicBall;
-                    Rotation += Scale.X*(15 + spen_sped);
+                    Rotation += Face() * (15 + spen_sped);
                     if (spen_sped < 60)
                     {
                         spen_sped += 0.3f;
