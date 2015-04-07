@@ -110,6 +110,7 @@
     <Content Include="Ressources\Background.jpg" />
     <Content Include="Ressources\sanic.png" />
     <Content Include="Ressources\SanicMusic.wav" />
+    <Content Include="Ressources\SanicSpen.wav" />
     <Content Include="Ressources\sanic_ball.png" />
     <Content Include="Ressources\sanic_jamp.wav" />
     <Content Include="Ressources\sanic_ren.wav" />
