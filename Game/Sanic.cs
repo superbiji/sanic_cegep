@@ -209,7 +209,7 @@ namespace Game
 			//Flip sprite
 			if (IsMoving())
 			{
-				Scale = new Vector2f(Face(), 1);
+				Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
 			}
 			
 			Position += sanic_sped;
