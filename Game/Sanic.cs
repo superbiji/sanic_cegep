@@ -12,22 +12,25 @@ namespace Game
 {
 	public class Sanic : Drawable
 	{
+		private const int DIRECTION_LEFT = -1;
+		private const int DIRECTION_RIGHT = 1;
+
 		private enum State
 		{
-			STANDING,
-			RUNNING,
-			JUMPING,
-			DUCKING,
-			SPINNING
+			Standing,
+			Running,
+			Jumping,
+			Ducking,
+			Spinning,
 		}
 
 		public Vector2f Position = new Vector2f(0, 0);
-		public Vector2f Scale = new Vector2f(1, 1);
-		public float Rotation = 0;
+		private Vector2f Scale = new Vector2f(1, 1);
+		private float Rotation = 0;
+		private int Direction = DIRECTION_LEFT;
+		private State state = State.Standing;
 
 		private Sprite currentSprite;
-        private bool asMoved = false;
-        private bool isSpenning = false;
         private float spen_sped = 0f;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
@@ -38,10 +41,8 @@ namespace Game
         private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
-		private readonly Vector2f VITESSE_X = new Vector2f(2, 0);
-		private readonly Vector2f VITESSE_Y = new Vector2f(0, -25);
+		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
-		private State state = State.STANDING;
 
 		public Vector2f Size
 		{
@@ -72,27 +73,8 @@ namespace Game
 
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
-			currentSprite = sanicBall;
-		}
 
-		public void Quote()
-		{
-			sanicQuote.Play();
-		}
-
-		public bool IsGrounded()
-		{
-			return Position.Y + Size.Y >= window.Size.Y;
-		}
-
-		public bool IsMoving()
-		{
-			return sanic_sped.X != 0;
-		}
-
-		public bool isStopped()
-		{
-			return IsGrounded() && !IsMoving();
+			stand();
 		}
 
 		private int Face()
@@ -100,60 +82,17 @@ namespace Game
 			return Scale.X < 0 ? -1 : 1;
 		}
 
-        public void spen(Action pDirection)
-        {
-            isSpenning = true;
-			switch (pDirection)
-			{
-				case Action.Left:
-					Scale = new Vector2f(-1, 1);
-					break;
-				case Action.Right:
-					Scale = new Vector2f(1, 1);
-					break;
-			}
-        }
-
-		public void Jump()
+		public void Quote()
 		{
-			if (IsGrounded())
-			{
-				jamp.Play();
-				sanic_sped += VITESSE_Y;
-			}
+			sanicQuote.Play();
 		}
 
-		public void Move(Action direction)
+		public void collisions()
 		{
-			switch (direction)
+			if (!isGrounded())
 			{
-				case Action.Right:
-					Move(-VITESSE_X);
-					break;
-				case Action.Left:
-					Move(VITESSE_X);
-					break;
-				case Action.Up:
-					Jump();
-					break;
-				default:
-					break;
+				fall();
 			}
-		}
-
-		public void Move(Vector2f speed)
-		{
-			sanic_sped -= speed;
-			asMoved = true;
-		}
-
-		public void Update()
-		{
-			if (!asMoved)
-			{
-				sanic_sped.X = Math.Round(sanic_sped.X) == 0 ? 0 : sanic_sped.X / 1.1f;
-			}
-
 			if (Position.X < 0)
 			{
 				//sanic.Position = new Vector2f(0, sanic.Position.Y);
@@ -164,78 +103,221 @@ namespace Game
 				//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
 				sanic_sped.X = -Math.Abs(sanic_sped.X);
 			}
+		}
 
-			if (IsGrounded())
+		private bool isMovingX()
+		{
+			return sanic_sped.X != 0;
+		}
+
+		private bool isGrounded()
+		{
+			return Position.Y + Size.Y >= window.Size.Y;
+		}
+
+		private void stand()
+		{
+			currentSprite = sanic;
+			ren.Stop();
+			state = State.Standing;
+		}
+
+		private void standing()
+		{
+			raise();
+			sanic_sped.X = Math.Round(sanic_sped.X) == 0 ? 0 : sanic_sped.X / 1.1f;
+			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+			{
+				jump();
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			{
+				duck();
+			}
+			else if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
+			{
+				run();
+			}
+		}
+
+		private void duck()
+		{
+			//currentSprite = sanicBall;
+			ren.Stop();
+			spen_sped = 0;
+			spenSound.Stop();
+			sanic_sped = new Vector2f(0, sanic_sped.Y);
+			state = State.Ducking;
+		}
+
+		private void ducking()
+		{
+			raise();
+			if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
+			{
+				spin();
+			}
+		}
+
+		private void spin()
+		{
+			currentSprite = sanicBall;
+			if (spenSound.Status == SoundStatus.Stopped)
+			{
+				spenSound.Play();
+			}
+			state = State.Spinning;
+		}
+
+		private void spinning()
+		{
+			Rotation += Face() * (15 + spen_sped);
+			spenSound.Pitch = 1 + (spen_sped / 30);
+			spen_sped += 0.3f;
+			if (!Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			{
+				boost();
+			}
+		}
+
+		private void boost()
+		{
+			if (spen_sped > 60)
+			{
+				sanic_sped = new Vector2f(Face() * 80, sanic_sped.Y);
+			}
+			run();
+		}
+
+		private void jump()
+		{
+			currentSprite = sanicBall;
+			ren.Stop();
+			sanic_sped += new Vector2f(0, -25);
+			jamp.Play();
+			state = State.Jumping;
+		}
+
+		private void fall()
+		{
+			currentSprite = sanicBall;
+			ren.Stop();
+			state = State.Jumping;
+		}
+
+		private void jumping()
+		{
+			sanic_sped += GRAVITY;
+			Rotation += 2.5f * sanic_sped.X / ACCELERATION_X.X;
+
+			if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) 
+			{
+				sanic_sped += ACCELERATION_X;
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+			{
+				sanic_sped -= ACCELERATION_X;
+			}
+			else
+			{
+				sanic_sped.X = Math.Round(sanic_sped.X) == 0 ? 0 : sanic_sped.X / 1.1f;
+			}
+
+			if (isGrounded())
 			{
 				Position = new Vector2f(Position.X, window.Size.Y - Size.Y);
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
-                
-                if (!isSpenning)
-                {
-                    currentSprite = sanic;
-				    if (Math.Abs(Rotation) > 180)
-				    {
-					    Rotation -= Math.Sign(Rotation) * 360;
-				    }
-                    Rotation /= 1.1f;
-                    if (spen_sped > 60)
-                    {
-                        sanic_sped = new Vector2f(Face() * 80, sanic_sped.Y);
-                    }
-                    spen_sped = 0;
-                    spenSound.Stop();
-                }
-                else
-                {
-                    currentSprite = sanicBall;
-                    Rotation += Face() * (15 + spen_sped);
-                    spenSound.Pitch = 1 + (spen_sped/30);
-                    if (spenSound.Status == SoundStatus.Stopped)
-                    {
-                        spenSound.Play();
-                    }
-                    if (spen_sped < 60)
-                    {
-                        spen_sped += 0.3f;
-                    }
-                }
-			}
-			else
-			{
-				currentSprite = sanicBall;
-				sanic_sped += GRAVITY;
-				Rotation += 2.5f * sanic_sped.X / VITESSE_X.X;
-			}
-
-			if (IsGrounded() && IsMoving())
-			{
-				ren.Pitch = 1f + Math.Abs(sanic_sped.X) / VITESSE_X.X / 33;
-				if (ren.Status == SoundStatus.Stopped)
+				if (isMovingX())
 				{
-					ren.Play();
+					run();
+				}
+				else
+				{
+					stand();
 				}
 			}
+		}
+
+		private void raise()
+		{
+			if (Math.Abs(Rotation) > 180)
+			{
+				Rotation -= Math.Sign(Rotation) * 360;
+			}
+            Rotation /= 1.1f;
+		}
+
+		private void run()
+		{
+			currentSprite = sanic;
+			ren.Play();
+			spen_sped = 0;
+            spenSound.Stop();
+			state = State.Running;
+		}
+
+		private void running()
+		{
+			raise();
+			ren.Pitch = 1f + Math.Abs(sanic_sped.X) / ACCELERATION_X.X / 33;
+			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+			{
+				jump();
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			{
+				duck();
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) 
+			{
+				sanic_sped += ACCELERATION_X;
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+			{
+				sanic_sped -= ACCELERATION_X;
+			}
 			else
 			{
-				ren.Stop();
+				stand();
+			}
+		}
+
+		public void Update()
+		{
+			switch (state)
+			{
+				case State.Standing:
+					standing();
+					break;
+				case State.Running:
+					running();
+					break;
+				case State.Jumping:
+					jumping();
+					break;
+				case State.Ducking:
+					ducking();
+					break;
+				case State.Spinning:
+					spinning();
+					break;
 			}
 
-			//Flip sprite
-			if (IsMoving())
+			if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
 			{
-				Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
+				Quote();
 			}
-			
+
+			collisions();
 			Position += sanic_sped;
 
 			UpdateSprite();
-			 
-			asMoved = false;
-            isSpenning = false;
 		}
 
 		private void UpdateSprite()
 		{
+			//Flip sprite
+			Scale = new Vector2f(sanic_sped.X < 0 ? -1 : 1, 1);
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;

@@ -32,34 +32,6 @@ namespace Game
 			{
 				window.DispatchEvents();
 
-				//TODO: better input manager
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
-                {
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
-                    {
-                        sanic.spen(Action.Right);
-                    }
-                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
-                    {
-                        sanic.spen(Action.Left);
-                    }
-                }
-				else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
-				{
-					sanic.Move(Action.Left);
-				}
-				else if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
-				{
-					sanic.Move(Action.Right);
-				}
-				if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
-				{
-					sanic.Jump();
-				}
-				if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
-				{
-					sanic.Quote();
-				}
 
 				sanic.Update();
 
