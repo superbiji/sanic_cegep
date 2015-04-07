@@ -12,6 +12,15 @@ namespace Game
 {
 	public class Sanic : Drawable
 	{
+		private enum State
+		{
+			STANDING,
+			RUNNING,
+			JUMPING,
+			DUCKING,
+			SPINNING
+		}
+
 		public Vector2f Position = new Vector2f(0, 0);
 		public Vector2f Scale = new Vector2f(1, 1);
 		public float Rotation = 0;
