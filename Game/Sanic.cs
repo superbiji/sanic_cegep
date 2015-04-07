@@ -19,7 +19,7 @@ namespace Game
 		private Sprite currentSprite;
         private bool asMoved = false;
         private bool isSpenning = false;
-        private int spen_sped = 0;
+        private float spen_sped = 0f;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
 		private readonly RenderWindow window;
@@ -170,8 +170,11 @@ namespace Game
                 else
                 {
                     currentSprite = sanicBall;
-                    Rotation += Face() + 12 + spen_sped;
-                    spen_sped++;
+                    Rotation += Scale.X*(12 + spen_sped);
+                    if (spen_sped < 50)
+                    {
+                        spen_sped += 0.3f;
+                    }
                 }
 			}
 			else
