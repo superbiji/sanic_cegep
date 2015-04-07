@@ -23,6 +23,7 @@ namespace Game
 
 		public Vector2f Position = new Vector2f(0, 0);
 		private Vector2f Scale = new Vector2f(1, 1);
+        private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
 		private float Rotation = 0;
 		private State state = State.Standing;
 		
@@ -244,6 +245,15 @@ namespace Game
 			{
 				stand();
 			}
+
+            if (sanic_sped.X > 0)
+            {
+                orientation = 1;
+            }
+            else if (sanic_sped.X < 0)
+            {
+                orientation = -1;
+            }
 		}
 
 		private void spin()
@@ -258,7 +268,15 @@ namespace Game
 
 		private void spinning()
 		{
-			Rotation += Face() * (15 + spen_sped);
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+            {
+                orientation = 1;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+            {
+                orientation = -1;
+            }
+			Rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
 			if (spen_sped < 60)
 			{
@@ -329,15 +347,7 @@ namespace Game
 
 		private void UpdateSprite()
 		{
-			//Flip sprite
-			if (sanic_sped.X < 0)
-			{
-				Scale = new Vector2f(-1, 1);
-			}
-			else if (sanic_sped.X > 0)
-			{
-				Scale = new Vector2f(1, 1);
-			}
+            Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;
