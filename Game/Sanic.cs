@@ -19,6 +19,7 @@ namespace Game
 		private Sprite currentSprite;
         private bool asMoved = false;
         private bool isSpenning = false;
+        private int spen_sped = 0;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
 		private readonly RenderWindow window;
@@ -164,11 +165,13 @@ namespace Game
 					    Rotation -= Math.Sign(Rotation) * 360;
 				    }
 				    Rotation /= 1.1f;
+                    spen_sped = 0;
                 }
                 else
                 {
                     currentSprite = sanicBall;
-					Rotation += Face() * 21;
+                    Rotation += Face() + 12 + spen_sped;
+                    spen_sped++;
                 }
 			}
 			else
