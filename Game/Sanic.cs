@@ -41,6 +41,7 @@ namespace Game
 		private readonly Vector2f VITESSE_X = new Vector2f(2, 0);
 		private readonly Vector2f VITESSE_Y = new Vector2f(0, -25);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
+		private State state = State.STANDING;
 
 		public Vector2f Size
 		{
