@@ -170,8 +170,8 @@ namespace Game
                 else
                 {
                     currentSprite = sanicBall;
-                    Rotation += Scale.X*(12 + spen_sped);
-                    if (spen_sped < 50)
+                    Rotation += Scale.X*(15 + spen_sped);
+                    if (spen_sped < 60)
                     {
                         spen_sped += 0.3f;
                     }
