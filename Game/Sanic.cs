@@ -26,6 +26,7 @@ namespace Game
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
 		private readonly Sound sanicQuote = new Sound();
+        private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
 		private readonly Vector2f VITESSE_X = new Vector2f(2, 0);
@@ -53,8 +54,10 @@ namespace Game
 			sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
+            spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
 
 			ren.Loop = true;
+            spenSound.Loop = true;
 
 
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
@@ -166,11 +169,17 @@ namespace Game
 				    }
 				    Rotation /= 1.1f;
                     spen_sped = 0;
+                    spenSound.Stop();
                 }
                 else
                 {
                     currentSprite = sanicBall;
                     Rotation += Face() * (15 + spen_sped);
+                    spenSound.Pitch = 1 + (spen_sped/30);
+                    if (spenSound.Status == SoundStatus.Stopped)
+                    {
+                        spenSound.Play();
+                    }
                     if (spen_sped < 60)
                     {
                         spen_sped += 0.3f;
