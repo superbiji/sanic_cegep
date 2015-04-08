@@ -17,6 +17,7 @@ namespace Game
             RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
                                                                        (uint)(nega.GetGlobalBounds().Height + 300)), 
                                                          "", Styles.None);
+            splashScreen.Clear(new Color(0, 0, 255));
             
             nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
