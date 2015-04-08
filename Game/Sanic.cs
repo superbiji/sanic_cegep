@@ -63,6 +63,7 @@ namespace Game
 			sanicDuck = new Sprite(new Texture(@"..\..\Ressources\sanicDuck.png"));
 			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\sanicQuote.wav")));
 			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\GottaGoFast.wav")));
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
             spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
