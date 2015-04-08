@@ -10,6 +10,22 @@ namespace Game
 	{
 		static void Main()
 		{
+            //Intro Nega de NEGA nigga bitch nega!
+            Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
+            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width), 
+                                                                       (uint)(nega.GetGlobalBounds().Height)), 
+                                                         "", Styles.None);
+            nega.Position = new Vector2f(0,0);
+            splashScreen.Draw(nega);
+            Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
+            scream.Loop = false;
+            splashScreen.Display();
+            scream.Play();
+            
+            System.Threading.Thread.Sleep(2000);
+            splashScreen.Close();
+            //fin de l'intro-------------------------------------------------------------------
+
 			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
 			window.SetFramerateLimit(60);
