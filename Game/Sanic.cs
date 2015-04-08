@@ -348,6 +348,7 @@ namespace Game
 		}
 
 		private void UpdateSprite()
+
 		{
             Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
 			currentSprite.Position = Position + currentSprite.Origin;
