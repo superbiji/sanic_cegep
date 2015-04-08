@@ -47,7 +47,7 @@ namespace Game
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
-		private readonly Sound sanicQuote = new Sound();
+		private readonly List<Sound> sanicQuote = new List<Sound>();
         private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
@@ -61,10 +61,12 @@ namespace Game
 			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
 			sanicBall = new Sprite(new Texture(@"..\..\Ressources\sanic_ball.png"));
 			sanicDuck = new Sprite(new Texture(@"..\..\Ressources\sanicDuck.png"));
-			sanicQuote.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanicQuote.wav");
+			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\sanicQuote.wav")));
+			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
             spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
+			Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
 
 			ren.Loop = true;
             spenSound.Loop = true;
@@ -202,7 +204,25 @@ namespace Game
 
 		public void Quote()
 		{
-			sanicQuote.Play();
+			bool playing = false;
+			foreach (Sound sound in sanicQuote)
+			{
+				if(sound.Status == SoundStatus.Playing)
+				{
+					playing = true;
+					break;
+				}
+			}
+			if (!playing)
+			{
+				Random r = new Random();
+				Quote(r.Next(sanicQuote.Count));
+			}
+		}
+
+		public void Quote(int i)
+		{
+			sanicQuote.ElementAt(i).Play();
 		}
 
 		private void raise()

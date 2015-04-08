@@ -111,6 +111,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Ressources\Background.jpg" />
+    <Content Include="Ressources\Intro.wav" />
+    <Content Include="Ressources\nEGA.png" />
     <Content Include="Ressources\sanic.png" />
     <Content Include="Ressources\SanicMusic.wav" />
     <Content Include="Ressources\SanicSpen.wav" />

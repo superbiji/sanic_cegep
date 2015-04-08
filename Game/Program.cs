@@ -17,7 +17,7 @@ namespace Game
             RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
                                                                        (uint)(nega.GetGlobalBounds().Height + 300)), 
                                                          "", Styles.None);
-            splashScreen.Clear(new Color(0, 0, 255));
+            splashScreen.Clear(Color.Blue);
             
             nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
@@ -45,7 +45,7 @@ namespace Game
 			Sanic sanic = new Sanic(window) { Position = new Vector2f(window.Size.X / 2, 0)};
 
 			teme.Play();
-			sanic.Quote();
+			sanic.Quote(0);
 
 			while (window.IsOpen)
 			{
