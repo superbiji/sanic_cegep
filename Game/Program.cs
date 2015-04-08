@@ -27,7 +27,7 @@ namespace Game
             
             nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
-
+            
             List<Sound> scream = new List<Sound>();
             scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
             scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
