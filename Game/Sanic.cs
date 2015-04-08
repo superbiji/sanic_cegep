@@ -320,6 +320,7 @@ namespace Game
 		}
 
 		private void UpdateSprite()
+
 		{
 			//Flip sprite
 			if (sanic_sped.X < 0)
