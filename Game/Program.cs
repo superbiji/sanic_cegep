@@ -5,6 +5,10 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Game
 {
@@ -13,6 +17,8 @@ namespace Game
 		static void Main()
 		{
             //Intro Nega de NEGA nigga bitch nega!
+
+            Random rand = new Random();
             Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
             RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
                                                                        (uint)(nega.GetGlobalBounds().Height + 300)), 
@@ -21,10 +27,17 @@ namespace Game
             
             nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
-            Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
-            scream.Loop = false;
+
+            List<Sound> scream = new List<Sound>();
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
+            int i = rand.Next(scream.Count);
+            scream.ElementAt(i).Loop = false;
+
+            scream.ElementAt(i).Play();            
+
             splashScreen.Display();
-            scream.Play();
+
             
             System.Threading.Thread.Sleep(2000);
             splashScreen.Close();
