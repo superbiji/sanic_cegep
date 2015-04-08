@@ -303,7 +303,7 @@ namespace Game
 			spenSound.Pitch = 1 + (spen_sped / 30);
 
             if (spen_sped < 60)
-            //if (true)  For funny wierd shit
+            //if (true)  //For funny wierd shit
 			{
 				spen_sped += 0.3f;
 			}
