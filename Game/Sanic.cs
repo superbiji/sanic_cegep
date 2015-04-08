@@ -86,7 +86,7 @@ namespace Game
         {
             if (spen_sped > 60)
             {
-                sanic_sped = new Vector2f(Face() * 80, sanic_sped.Y);
+                sanic_sped = new Vector2f(Face() * (spen_sped + 20), sanic_sped.Y);
             }
             run();
         }
@@ -301,7 +301,9 @@ namespace Game
             }
 			Rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
-			if (spen_sped < 60)
+
+            if (spen_sped < 60)
+            //if (true)  For funny wierd shit
 			{
 				spen_sped += 0.3f;
 			}
