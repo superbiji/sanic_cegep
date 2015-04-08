@@ -98,11 +98,13 @@ namespace Game
             {
                 //sanic.Position = new Vector2f(0, sanic.Position.Y);
                 sanic_sped.X = Math.Abs(sanic_sped.X);
+                orientation = 1;
             }
             else if (Position.X + Size.X > window.Size.X)
             {
                 //sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
                 sanic_sped.X = -Math.Abs(sanic_sped.X);
+                orientation = -1;
             }
         }
 
