@@ -17,8 +17,7 @@ namespace Game
 		static void Main()
 		{
             //Intro Nega de NEGA nigga bitch nega!
-
-            Random rand = new Random();
+            Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
             Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
             RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
                                                                        (uint)(nega.GetGlobalBounds().Height + 300)), 
@@ -27,10 +26,11 @@ namespace Game
             
             nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
-            
+
             List<Sound> scream = new List<Sound>();
             scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
             scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
+
             int i = rand.Next(scream.Count);
             scream.ElementAt(i).Loop = false;
 
