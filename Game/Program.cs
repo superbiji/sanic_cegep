@@ -14,10 +14,11 @@ namespace Game
 		{
             //Intro Nega de NEGA nigga bitch nega!
             Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
-            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width), 
-                                                                       (uint)(nega.GetGlobalBounds().Height)), 
+            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
+                                                                       (uint)(nega.GetGlobalBounds().Height + 300)), 
                                                          "", Styles.None);
-            nega.Position = new Vector2f(0,0);
+            
+            nega.Position = new Vector2f(150, 150);
             splashScreen.Draw(nega);
             Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
             scream.Loop = false;
