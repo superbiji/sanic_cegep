@@ -1,4 +1,5 @@
-﻿// niga
+﻿// NEGA production
+// Present : Sanic au pays de la roulette !
 using SFML.Audio;
 using SFML.Graphics;
 using SFML.System;
