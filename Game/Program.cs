@@ -1,4 +1,6 @@
-﻿using SFML.Audio;
+﻿// NEGA production
+// Present : Sanic au pays de la roulette !
+using SFML.Audio;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
