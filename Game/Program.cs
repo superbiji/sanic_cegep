@@ -16,32 +16,32 @@ namespace Game
 	{
 		static void Main()
 		{
-            //Intro Nega de NEGA nigga bitch nega!
-            Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
-            Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
-            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
-                                                                       (uint)(nega.GetGlobalBounds().Height + 300)), 
-                                                         "", Styles.None);
-            splashScreen.Clear(Color.Blue);
-            
-            nega.Position = new Vector2f(150, 150);
-            splashScreen.Draw(nega);
+			//Intro Nega de NEGA nigga bitch nega!
+			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
+			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
+			RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
+																	   (uint)(nega.GetGlobalBounds().Height + 300)), 
+														 "", Styles.None);
+			splashScreen.Clear(Color.Blue);
+			
+			nega.Position = new Vector2f(150, 150);
+			splashScreen.Draw(nega);
 
-            List<Sound> scream = new List<Sound>();
-            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
-            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
+			List<Sound> scream = new List<Sound>();
+			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
 
-            int i = rand.Next(scream.Count);
-            scream.ElementAt(i).Loop = false;
+			int i = rand.Next(scream.Count);
+			scream.ElementAt(i).Loop = false;
 
-            scream.ElementAt(i).Play();            
+			scream.ElementAt(i).Play();            
 
-            splashScreen.Display();
+			splashScreen.Display();
 
-            
-            System.Threading.Thread.Sleep(2000);
-            splashScreen.Close();
-            //fin de l'intro-------------------------------------------------------------------
+			
+			System.Threading.Thread.Sleep(2000);
+			splashScreen.Close();
+			//fin de l'intro-------------------------------------------------------------------
 
 			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
@@ -51,7 +51,7 @@ namespace Game
 			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 			teme.Volume = 10;
 			teme.Loop = true;
-           
+		   
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 

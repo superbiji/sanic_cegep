@@ -23,11 +23,11 @@ namespace Game
 
 		public Vector2f Position = new Vector2f(0, 0);
 		private Vector2f Scale = new Vector2f(1, 1);
-        private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
+		private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
 		private float Rotation = 0;
 		private State state = State.Standing;
 		
-        public Vector2f Size
+		public Vector2f Size
 		{
 			get
 			{
@@ -40,7 +40,7 @@ namespace Game
 		}
 
 		private Sprite currentSprite;
-        private float spen_sped = 0f;
+		private float spen_sped = 0f;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
 		private readonly RenderWindow window;
@@ -48,7 +48,7 @@ namespace Game
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
 		private readonly List<Sound> sanicQuote = new List<Sound>();
-        private readonly Sound spenSound = new Sound();
+		private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
 		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
@@ -66,11 +66,11 @@ namespace Game
 			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\GottaGoFast.wav")));
 			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
-            spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
+			spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
 			Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
 
 			ren.Loop = true;
-            spenSound.Loop = true;
+			spenSound.Loop = true;
 
 
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
@@ -82,39 +82,39 @@ namespace Game
 
 
 
-        private void boost()
-        {
-            if (spen_sped > 60)
-            {
-                sanic_sped = new Vector2f(Face() * (spen_sped + 20), sanic_sped.Y);
-            }
-            run();
-        }
+		private void boost()
+		{
+			if (spen_sped > 60)
+			{
+				sanic_sped = new Vector2f(Face() * (spen_sped + 20), sanic_sped.Y);
+			}
+			run();
+		}
 
-        public void collisions()
-        {
-            if (!isGrounded())
-            {
-                fall();
-            }
-            if (Position.X < 0)
-            {
-                //sanic.Position = new Vector2f(0, sanic.Position.Y);
-                sanic_sped.X = Math.Abs(sanic_sped.X);
-                orientation = 1;
-            }
-            else if (Position.X + Size.X > window.Size.X)
-            {
-                //sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
-                sanic_sped.X = -Math.Abs(sanic_sped.X);
-                orientation = -1;
-            }
-        }
+		public void collisions()
+		{
+			if (!isGrounded())
+			{
+				fall();
+			}
+			if (Position.X < 0)
+			{
+				//sanic.Position = new Vector2f(0, sanic.Position.Y);
+				sanic_sped.X = Math.Abs(sanic_sped.X);
+				orientation = 1;
+			}
+			else if (Position.X + Size.X > window.Size.X)
+			{
+				//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
+				sanic_sped.X = -Math.Abs(sanic_sped.X);
+				orientation = -1;
+			}
+		}
 
-        public void Draw(RenderTarget target, RenderStates states)
-        {
-            currentSprite.Draw(target, states);
-        }
+		public void Draw(RenderTarget target, RenderStates states)
+		{
+			currentSprite.Draw(target, states);
+		}
 	
 		private void duck()
 		{
@@ -232,7 +232,7 @@ namespace Game
 			{
 				Rotation -= Math.Sign(Rotation) * 360;
 			}
-            Rotation /= 1.1f;
+			Rotation /= 1.1f;
 		}
 
 		private void run()
@@ -240,7 +240,7 @@ namespace Game
 			currentSprite = sanic;
 			ren.Play();
 			spen_sped = 0;
-            spenSound.Stop();
+			spenSound.Stop();
 			state = State.Running;
 		}
 
@@ -269,14 +269,14 @@ namespace Game
 				stand();
 			}
 
-            if (sanic_sped.X > 0)
-            {
-                orientation = 1;
-            }
-            else if (sanic_sped.X < 0)
-            {
-                orientation = -1;
-            }
+			if (sanic_sped.X > 0)
+			{
+				orientation = 1;
+			}
+			else if (sanic_sped.X < 0)
+			{
+				orientation = -1;
+			}
 		}
 
 		private void spin()
@@ -291,19 +291,19 @@ namespace Game
 
 		private void spinning()
 		{
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
-            {
-                orientation = 1;
-            }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
-            {
-                orientation = -1;
-            }
+			if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+			{
+				orientation = 1;
+			}
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+			{
+				orientation = -1;
+			}
 			Rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
 
-            if (spen_sped < 60)
-            //if (true)  //For funny wierd shit
+			if (spen_sped < 60)
+			//if (true)  //For funny wierd shit
 			{
 				spen_sped += 0.3f;
 			}
@@ -373,10 +373,10 @@ namespace Game
 		private void UpdateSprite()
 
 		{
-            Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
+			Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;
 		}
-    }
+	}
 }
