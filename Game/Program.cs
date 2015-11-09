@@ -55,14 +55,15 @@ namespace Game
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
-            //Liste pour le loll MOUHAHAHAHAHA
-            int nbrSanic = 10000;
+			//Sanic sanic = new Sanic(window) { Position = new Vector2f(window.Size.X*3 / 4, 0)};
+
+            //array pour le loll
+            int nbrSanic = 1000;
             List<Sanic> sanic = new List<Sanic>();
             for (int ji = 0; ji < nbrSanic; ji++ )
             {
                 sanic.Add(new Sanic(window));
-                //float posX = (sanic[ji].Size.X / 2.01f) + ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
-                float posX = (sanic[ji].duckWidth() / 2f)+((window.Size.X - sanic[ji].duckWidth()) * (ji + 1) / (1 + nbrSanic));
+                float posX = (sanic[ji].Size.X / 2)+((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
                 sanic[ji].Position = new Vector2f(posX - (sanic[ji].Size.X/2), 0);
             }
 			teme.Play();
@@ -73,6 +74,8 @@ namespace Game
 			while (window.IsOpen)
 			{
 				window.DispatchEvents();
+
+				//sanic.Update();
 
 				window.Clear();
 				window.Draw(background);
