@@ -149,6 +149,11 @@ namespace Game
 			}
 		}
 
+        public int duckWidth()
+        {
+            return (int)(sanicDuck.Texture.Size.X);
+        }
+
 		private int Face()
 		{
 			return Scale.X < 0 ? -1 : 1;

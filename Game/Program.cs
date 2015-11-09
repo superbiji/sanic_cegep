@@ -15,7 +15,12 @@ namespace Game
 	static class Program
 	{
 		static int Main()
-		{
+        {
+            int nbrSanic = 100;
+
+            int largFen = 800;
+            float ratioVoulu = 4f / 3f;
+
 			//Intro Nega de NEGA nigga bitch nega!
 			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
 			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
@@ -43,7 +48,7 @@ namespace Game
 			splashScreen.Close();
 			//fin de l'intro-------------------------------------------------------------------
 
-			RenderWindow window = new RenderWindow(new VideoMode(800, 600), "SANIC SPED!!", Styles.Close);
+			RenderWindow window = new RenderWindow(new VideoMode((uint)largFen, (uint)(Math.Round(largFen/ratioVoulu))), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
 			window.SetFramerateLimit(60);
 			window.SetKeyRepeatEnabled(false);
@@ -53,17 +58,15 @@ namespace Game
 			teme.Loop = true;
 		   
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
+			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
 
             //Liste pour le loll MOUHAHAHAHAHA
-            int nbrSanic = 10;
             List<Sanic> sanic = new List<Sanic>();
             for (int ji = 0; ji < nbrSanic; ji++ )
             {
                 sanic.Add(new Sanic(window));
-                //float posX = (sanic[ji].Size.X / 2.01f) + ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
-                float posX = (sanic[ji].duckWidth() / 2f)+((window.Size.X - sanic[ji].duckWidth()) * (ji + 1) / (1 + nbrSanic));
-                sanic[ji].Position = new Vector2f(posX - (sanic[ji].Size.X/2), 0);
+                float posX = ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
+                sanic[ji].Position = new Vector2f(posX, 0);
             }
 			teme.Play();
 
