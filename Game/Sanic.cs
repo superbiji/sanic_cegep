@@ -103,14 +103,16 @@ namespace Game
 			if (Position.X < 0)
 			{
 				//sanic.Position = new Vector2f(0, sanic.Position.Y);
-				sanic_sped.X = Math.Abs(sanic_sped.X);
+                sanic_sped.X = Math.Abs(sanic_sped.X);
+				//sanic_sped.X = (int)(Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
                 bump.Play();
 				orientation = 1;
 			}
 			else if (Position.X + Size.X > window.Size.X)
 			{
 				//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
-				sanic_sped.X = -Math.Abs(sanic_sped.X);
+                sanic_sped.X = -Math.Abs(sanic_sped.X);
+                //sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9);//corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
                 bump.Play();
 				orientation = -1;
 			}

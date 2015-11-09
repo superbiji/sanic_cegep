@@ -14,7 +14,7 @@ namespace Game
 {
 	static class Program
 	{
-		static void Main()
+		static int Main()
 		{
 			//Intro Nega de NEGA nigga bitch nega!
 			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
@@ -72,6 +72,7 @@ namespace Game
 				window.Draw(sanic);
 				window.Display();
 			}
+            return 0;
 		}
 
 		static void OnClose(object sender, EventArgs e)
