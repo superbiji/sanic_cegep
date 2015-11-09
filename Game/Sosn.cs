@@ -1,7 +1,6 @@
 ﻿using SFML.Audio;
 using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace Game
     {
         public readonly List<Sound> sanicQuote = new List<Sound>();
 	    public readonly Sound spenSound = new Sound();
-        //
 	    public readonly Sound jamp = new Sound();
 	    public readonly Sound ren = new Sound();
         public readonly Sound bump;

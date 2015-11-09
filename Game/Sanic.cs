@@ -52,9 +52,9 @@ namespace Game
         private static Spiirtes imaje = new Spiirtes();
 
 		private readonly List<Sound> sanicQuote = new List<Sound>();
-		private readonly Sound spenSound;
-		private readonly Sound jamp;
-        private readonly Sound ren;
+		private readonly Sound spenSound = new Sound();
+		private readonly Sound jamp = new Sound();
+		private readonly Sound ren = new Sound();
         private readonly Sound bump;
 		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
@@ -86,10 +86,7 @@ namespace Game
 			stand();
 		}
 
-        public int duckWidth()
-        {
-            return (int)sanicDuck.Texture.Size.X;
-        }
+
 
 		private void boost()
 		{
