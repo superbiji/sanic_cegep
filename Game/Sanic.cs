@@ -47,6 +47,10 @@ namespace Game
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
+
+        private static Sosn bruiit = new Sosn();
+        private static Spiirtes imaje = new Spiirtes();
+
 		private readonly List<Sound> sanicQuote = new List<Sound>();
 		private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
@@ -59,17 +63,16 @@ namespace Game
 		{
 			window = rw;
 
-			sanic = new Sprite(new Texture(@"..\..\Ressources\sanic.png"));
-			sanicBall = new Sprite(new Texture(@"..\..\Ressources\sanic_ball.png"));
-			sanicDuck = new Sprite(new Texture(@"..\..\Ressources\sanicDuck.png"));
-			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\sanicQuote.wav")));
-			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
-			sanicQuote.Add(new Sound(new SoundBuffer(@"..\..\Ressources\GottaGoFast.wav")));
-			jamp.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_jamp.wav");
-			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
-			spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
-			Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
-            bump = new Sound(new SoundBuffer(@"..\..\Ressources\bump.wav"));
+            sanic = imaje.sanic;
+			sanicBall = imaje.sanicBall;
+			sanicDuck = imaje.sanicDuck;
+
+
+            sanicQuote = bruiit.sanicQuote;
+            jamp = bruiit.jamp;
+            ren = bruiit.ren;
+            spenSound = bruiit.spenSound;
+            bump = bruiit.bump;
 
             bump.Loop = false;
 			ren.Loop = true;

@@ -55,21 +55,35 @@ namespace Game
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
-			Sanic sanic = new Sanic(window) { Position = new Vector2f(window.Size.X / 2, 0)};
+			//Sanic sanic = new Sanic(window) { Position = new Vector2f(window.Size.X*3 / 4, 0)};
 
+            //array pour le loll
+            int nbrSanic = 1000;
+            List<Sanic> sanic = new List<Sanic>();
+            for (int ji = 0; ji < nbrSanic; ji++ )
+            {
+                sanic.Add(new Sanic(window));
+                float posX = (sanic[ji].Size.X / 2)+((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
+                sanic[ji].Position = new Vector2f(posX - (sanic[ji].Size.X/2), 0);
+            }
 			teme.Play();
-			sanic.Quote(0);
+
+
+            sanic[0].Quote(0);
 
 			while (window.IsOpen)
 			{
 				window.DispatchEvents();
 
-
-				sanic.Update();
+				//sanic.Update();
 
 				window.Clear();
 				window.Draw(background);
-				window.Draw(sanic);
+                foreach (Sanic s in sanic)
+                {
+                    s.Update();
+				    window.Draw(s);
+                }
 				window.Display();
 			}
             return 0;
