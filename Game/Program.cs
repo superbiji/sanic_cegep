@@ -16,10 +16,10 @@ namespace Game
 	{
 		static int Main()
         {
-            int nbrSanic = 100;
+            int nbrSanic = 6;
 
-            int largFen = 800;
-            float ratioVoulu = 4f / 3f;
+            int largFen = 1120;
+            float ratioVoulu = 16f / 9f;
 
 			//Intro Nega de NEGA nigga bitch nega!
 			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
