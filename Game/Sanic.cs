@@ -51,6 +51,7 @@ namespace Game
 		private readonly Sound spenSound = new Sound();
 		private readonly Sound jamp = new Sound();
 		private readonly Sound ren = new Sound();
+        private readonly Sound bump;
 		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
@@ -68,7 +69,9 @@ namespace Game
 			ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
 			spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
 			Sound scream = new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav"));
+            bump = new Sound(new SoundBuffer(@"..\..\Ressources\bump.wav"));
 
+            bump.Loop = false;
 			ren.Loop = true;
 			spenSound.Loop = true;
 
@@ -101,12 +104,14 @@ namespace Game
 			{
 				//sanic.Position = new Vector2f(0, sanic.Position.Y);
 				sanic_sped.X = Math.Abs(sanic_sped.X);
+                bump.Play();
 				orientation = 1;
 			}
 			else if (Position.X + Size.X > window.Size.X)
 			{
 				//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
 				sanic_sped.X = -Math.Abs(sanic_sped.X);
+                bump.Play();
 				orientation = -1;
 			}
 		}
