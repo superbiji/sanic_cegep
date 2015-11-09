@@ -21,7 +21,7 @@ namespace Game
 			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
 			RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
 																	   (uint)(nega.GetGlobalBounds().Height + 300)), 
-														 "", Styles.None);
+														                "", Styles.None);
 			splashScreen.Clear(Color.Blue);
 			
 			nega.Position = new Vector2f(150, 150);
@@ -56,7 +56,7 @@ namespace Game
 			background.Scale = new Vector2f(800 / background.GetLocalBounds().Width, 600 / background.GetLocalBounds().Height);
 
             //Liste pour le loll MOUHAHAHAHAHA
-            int nbrSanic = 10000;
+            int nbrSanic = 10;
             List<Sanic> sanic = new List<Sanic>();
             for (int ji = 0; ji < nbrSanic; ji++ )
             {
