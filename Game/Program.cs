@@ -16,10 +16,10 @@ namespace Game
 	{
 		static int Main()
         {
-            int nbrSanic = 6;
+            const int nbrSanic = 1120;
 
-            int largFen = 1120;
-            float ratioVoulu = 16f / 9f;
+            const int largFen = 1120;
+            const float ratioVoulu = 16f / 9f;
 
 			//Intro Nega de NEGA nigga bitch nega!
 			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
@@ -54,7 +54,7 @@ namespace Game
 			window.SetKeyRepeatEnabled(false);
 
 			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
-			teme.Volume = 10;
+			teme.Volume = 5;
 			teme.Loop = true;
 		   
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
