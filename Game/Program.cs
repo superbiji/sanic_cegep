@@ -16,8 +16,7 @@ namespace Game
 	{
 		static int Main()
         {
-            const int nbrSanic = 1120;
-
+            const int nbrSanic = 2;
             const int largFen = 1120;
             const float ratioVoulu = 16f / 9f;
 
@@ -39,24 +38,18 @@ namespace Game
 			int i = rand.Next(scream.Count);
 			scream.ElementAt(i).Loop = false;
 
-			scream.ElementAt(i).Play();            
-
 			splashScreen.Display();
-
-			
+			scream.ElementAt(i).Play();
 			System.Threading.Thread.Sleep(2000);
+
 			splashScreen.Close();
+            splashScreen.Dispose();
 			//fin de l'intro-------------------------------------------------------------------
 
 			RenderWindow window = new RenderWindow(new VideoMode((uint)largFen, (uint)(Math.Round(largFen/ratioVoulu))), "SANIC SPED!!", Styles.Close);
 			window.Closed += new EventHandler(OnClose);
 			window.SetFramerateLimit(60);
 			window.SetKeyRepeatEnabled(false);
-
-			Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
-			teme.Volume = 5;
-			teme.Loop = true;
-		   
 			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
 
@@ -68,6 +61,10 @@ namespace Game
                 float posX = ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
                 sanic[ji].Position = new Vector2f(posX, 0);
             }
+
+            Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+            teme.Volume = 5;
+            teme.Loop = true;
 			teme.Play();
 
 
@@ -75,8 +72,6 @@ namespace Game
 
 			while (window.IsOpen)
 			{
-				window.DispatchEvents();
-
 				window.Clear();
 				window.Draw(background);
                 foreach (Sanic s in sanic)
@@ -85,14 +80,16 @@ namespace Game
 				    window.Draw(s);
                 }
 				window.Display();
+				window.DispatchEvents();
 			}
+
+            window.Dispose();
             return 0;
 		}
 
-		static void OnClose(object sender, EventArgs e)
-		{
-			RenderWindow window = (RenderWindow)sender;
-			window.Close();
-		}
+        static void OnClose(object sender, EventArgs e)
+        {
+            ((RenderWindow)sender).Close();
+        }
 	}
 }
