@@ -14,44 +14,17 @@ namespace Game
 {
 	static class Program
 	{
+        const int nbrSanic = 1;
+        const int largFen = 1120;
+        const float ratioVoulu = 16f / 9f;
+
+        private static RenderWindow window;
+        private static Sprite background;
+
 		static int Main()
         {
-            const int nbrSanic = 2;
-            const int largFen = 1120;
-            const float ratioVoulu = 16f / 9f;
-
-			//Intro Nega de NEGA nigga bitch nega!
-			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
-			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
-			RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
-																	   (uint)(nega.GetGlobalBounds().Height + 300)), 
-														                "", Styles.None);
-			splashScreen.Clear(Color.Blue);
-			
-			nega.Position = new Vector2f(150, 150);
-			splashScreen.Draw(nega);
-
-			List<Sound> scream = new List<Sound>();
-			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
-			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
-
-			int i = rand.Next(scream.Count);
-			scream.ElementAt(i).Loop = false;
-
-			splashScreen.Display();
-			scream.ElementAt(i).Play();
-			System.Threading.Thread.Sleep(2000);
-
-			splashScreen.Close();
-            splashScreen.Dispose();
-			//fin de l'intro-------------------------------------------------------------------
-
-			RenderWindow window = new RenderWindow(new VideoMode((uint)largFen, (uint)(Math.Round(largFen/ratioVoulu))), "SANIC SPED!!", Styles.Close);
-			window.Closed += new EventHandler(OnClose);
-			window.SetFramerateLimit(60);
-			window.SetKeyRepeatEnabled(false);
-			Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
+            intro();
+            initFenetre();
 
             //Liste pour le loll MOUHAHAHAHAHA
             List<Sanic> sanic = new List<Sanic>();
@@ -83,10 +56,56 @@ namespace Game
 				window.DispatchEvents();
 			}
 
+            sanic.Clear();
+            teme.Dispose();
             window.Dispose();
             return 0;
 		}
 
+        static void intro()
+        {
+            //Intro Nega de NEGA nigga bitch nega!
+            Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second + 3))));
+            Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
+            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300),
+                                                                       (uint)(nega.GetGlobalBounds().Height + 300)),
+                                                                        "", Styles.None);
+            splashScreen.Clear(Color.Blue);
+
+            nega.Position = new Vector2f(150, 150);
+            splashScreen.Draw(nega);
+
+            List<Sound> scream = new List<Sound>();
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
+
+            int i = rand.Next(scream.Count);
+            scream.ElementAt(i).Loop = false;
+
+            splashScreen.Display();
+            scream.ElementAt(i).Play();
+            System.Threading.Thread.Sleep(2000);
+            
+            scream.Clear();
+            nega.Dispose();
+            splashScreen.Close();
+            splashScreen.Dispose();
+        }
+
+        static void initFenetre()
+        {
+            window = new RenderWindow(new VideoMode((uint)largFen, (uint)(Math.Round(largFen / ratioVoulu))), "SANIC SPED!!", Styles.Close);
+            window.Closed += new EventHandler(OnClose);
+            window.SetFramerateLimit(60);
+            window.SetKeyRepeatEnabled(false);
+
+            background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
+            background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
+        }
+
+
+
+        //évènements
         static void OnClose(object sender, EventArgs e)
         {
             ((RenderWindow)sender).Close();
