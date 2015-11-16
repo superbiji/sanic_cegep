@@ -14,7 +14,7 @@ namespace Game
 {
 	static class Program
 	{
-        const int nbrSanic = 500;
+        const int nbrSanic = 2;
         const int largFen = 1120;
         const float ratioVoulu = 16f / 9f;
 
@@ -35,25 +35,28 @@ namespace Game
                 sanic[ji].Position = new Vector2f(posX, 0);
             }
             
-            sanic[0].playTeme();
-            sanic[0].Quote(0);
+            if (sanic.Count > 0)
+            {
+                sanic[0].playTeme();
+                sanic[0].Quote(0);
 
-			while (window.IsOpen)
-			{
-				window.Clear();
-				window.Draw(background);
-                foreach (Sanic s in sanic)
+                while (window.IsOpen)
                 {
-                    s.Update();
-				    window.Draw(s);
+                    window.Clear();
+                    window.Draw(background);
+                    foreach (Sanic s in sanic)
+                    {
+                        s.Update();
+                        window.Draw(s);
+                    }
+                    window.Display();
+                    window.DispatchEvents();
                 }
-				window.Display();
-				window.DispatchEvents();
-			}
 
-            sanic[0].stopTeme();
-            sanic.Clear();
-            window.Dispose();
+                sanic[0].stopTeme();
+                sanic.Clear();
+                window.Dispose();
+            }
             return 0;
 		}
 
