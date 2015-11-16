@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ressources\Squidnic.cs" />
     <Compile Include="Sanic.cs" />
     <Compile Include="Sosn.cs" />
     <Compile Include="Spiirtes.cs" />
