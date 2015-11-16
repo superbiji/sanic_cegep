@@ -26,13 +26,13 @@ namespace Game
 		    spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
             bump = new Sound(new SoundBuffer(@"..\..\Ressources\bump.wav"));
             teme = new Sound(new SoundBuffer(@"..\..\Ressources\SanicMusic.wav"));
-            teme.Volume = 10;
-            teme.Loop = true;
         }
 
         public void playTeme()
         {
-            teme.Play(); 
+            teme.Volume = 10;
+            teme.Loop = true;
+            teme.Play();
         }
 
         public void stopTeme()
