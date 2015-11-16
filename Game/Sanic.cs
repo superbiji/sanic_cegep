@@ -48,7 +48,7 @@ namespace Game
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
 
-        private static Sosn bruiit = new Sosn();
+        static private Sosn bruiit = new Sosn();
         private static Spiirtes imaje = new Spiirtes();
 
 		private readonly List<Sound> sanicQuote = new List<Sound>();
@@ -92,7 +92,7 @@ namespace Game
 		{
 			if (spen_sped > 60)
 			{
-				sanic_sped = new Vector2f(Face() * (spen_sped + 20), sanic_sped.Y);
+                sanic_sped.X = Face() * (spen_sped + 20);
 			}
 			run();
 		}
@@ -130,7 +130,7 @@ namespace Game
 			ren.Stop();
 			spen_sped = 0;
 			spenSound.Stop();
-			sanic_sped = new Vector2f(0, sanic_sped.Y);
+			sanic_sped.X = 0;
 			state = State.Ducking;
 		}
 
@@ -178,7 +178,7 @@ namespace Game
 		{
 			currentSprite = sanicBall;
 			ren.Stop();
-			sanic_sped += new Vector2f(0, -25);
+			sanic_sped.Y += -25;
 			jamp.Play();
 			state = State.Jumping;
 		}
@@ -203,7 +203,7 @@ namespace Game
 
 			if (isGrounded())
 			{
-				Position = new Vector2f(Position.X, window.Size.Y - Size.Y);
+				Position.Y = window.Size.Y - Size.Y;
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				if (isMovingX())
 				{
@@ -315,8 +315,8 @@ namespace Game
 			Rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
 
-			//if (spen_sped < 60)
-			if (true)  //For funny wierd shit
+			if (spen_sped < 60)
+			//if (true)  //For funny wierd shit
 			{
 				spen_sped += 0.3f;
 			}
@@ -386,10 +386,20 @@ namespace Game
 		private void UpdateSprite()
 
 		{
-			Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
+			Scale.X = orientation;			//Flip sprite
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;
 		}
+
+        public void playTeme()
+        {
+            bruiit.playTeme();
+        }
+
+        public void stopTeme()
+        {
+            bruiit.stopTeme();
+        }
 	}
 }

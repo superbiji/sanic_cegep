@@ -14,6 +14,7 @@ namespace Game
 	    public readonly Sound jamp = new Sound();
 	    public readonly Sound ren = new Sound();
         public readonly Sound bump;
+        public readonly Sound teme;
 
         public Sosn()
         {
@@ -24,6 +25,19 @@ namespace Game
 		    ren.SoundBuffer = new SoundBuffer(@"..\..\Ressources\sanic_ren.wav");
 		    spenSound.SoundBuffer = new SoundBuffer(@"..\..\Ressources\SanicSpen.wav");
             bump = new Sound(new SoundBuffer(@"..\..\Ressources\bump.wav"));
+            teme = new Sound(new SoundBuffer(@"..\..\Ressources\SanicMusic.wav"));
+            teme.Volume = 10;
+            teme.Loop = true;
+        }
+
+        public void playTeme()
+        {
+            teme.Play(); 
+        }
+
+        public void stopTeme()
+        {
+            teme.Stop();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Game
 {
 	static class Program
 	{
-        const int nbrSanic = 1;
+        const int nbrSanic = 500;
         const int largFen = 1120;
         const float ratioVoulu = 16f / 9f;
 
@@ -34,13 +34,8 @@ namespace Game
                 float posX = ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
                 sanic[ji].Position = new Vector2f(posX, 0);
             }
-
-            Music teme = new Music(@"..\..\Ressources\SanicMusic.wav");
-            teme.Volume = 5;
-            teme.Loop = true;
-			teme.Play();
-
-
+            
+            sanic[0].playTeme();
             sanic[0].Quote(0);
 
 			while (window.IsOpen)
@@ -56,8 +51,8 @@ namespace Game
 				window.DispatchEvents();
 			}
 
+            sanic[0].stopTeme();
             sanic.Clear();
-            teme.Dispose();
             window.Dispose();
             return 0;
 		}
