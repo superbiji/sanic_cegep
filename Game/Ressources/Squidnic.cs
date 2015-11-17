@@ -20,8 +20,10 @@ namespace Game
             Spinning,
         }
 
+        static private readonly Sosn bruiit = new Sosn();
+        static private readonly Spiirtes imajes = new Spiirtes();
+
         private readonly RenderWindow window;
-        private readonly Spiirtes imajes = new Spiirtes();
         private Sprite currentSpriteBody;
         private Sprite currentSpriteFace;
 
@@ -40,7 +42,7 @@ namespace Game
         public Vector2f Position = new Vector2f(200, 200);
         private Vector2f Scale = new Vector2f(1, 1);
         private Vector2f squid_sped = new Vector2f(0, 0);
-        private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
+        private readonly Vector2f ACCELERATION_X = new Vector2f(1, 0);
         private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
         public Squidnic(RenderWindow rw)
@@ -50,7 +52,10 @@ namespace Game
             currentSpriteBody.Origin = new Vector2f(imajes.squidBody.GetLocalBounds().Width / 2, imajes.squidBody.GetLocalBounds().Height / 2);
 
             currentSpriteFace = imajes.squidFace;
-            currentSpriteFace.Origin = new Vector2f((imajes.squidFace.GetLocalBounds().Width / 2), imajes.squidFace.GetLocalBounds().Height / 2);
+            currentSpriteFace.Origin = new Vector2f(-5+(imajes.squidFace.GetLocalBounds().Width / 2), -2+(imajes.squidFace.GetLocalBounds().Height / 2));
+
+            bruiit.squid_step.Loop = true;
+            bruiit.squid_step.Volume = 10;
         }
 
         public void Draw(RenderTarget target, RenderStates states)
@@ -67,7 +72,6 @@ namespace Game
             currentSpriteBody.Scale = Scale;
 
             currentSpriteFace.Position = Position;
-            currentSpriteFace.Rotation = Rotation;
             currentSpriteFace.Scale = Scale;
         }
 
@@ -92,14 +96,61 @@ namespace Game
                 Position.Y = window.Size.Y - Size.Y;
                 squid_sped.Y = squid_sped.Y < 0 ? squid_sped.Y : 0;
             }
+
+            if ((Position.X-currentSpriteBody.Origin.X <= 0) || (Position.X+currentSpriteBody.Origin.X >= window.Size.X))
+            {
+                orientation *= -1;
+            }
+        }
+
+        private void running()
+        {
+            bruiit.ren.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
+            squid_sped += ACCELERATION_X;
+            bruiit.squid_step.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
+        }
+
+        private void run()
+        {
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
+            {
+                orientation = 1;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+            {
+                orientation = -1;
+            }
+
+            bruiit.squid_step.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
+            bruiit.squid_step.Play();
+            running();
         }
 
         public void update()
         {
+            if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
+            {
+                run();
+            }
 
+
+            Rotation = Position.X;
+            currentSpriteBody.Rotation = Rotation;
             collision();
-            Position += squid_sped;
+            Position += orientation*squid_sped;
             UpdateSprite();
+        }
+
+        public void playTeme()
+        {
+            bruiit.gloria.Loop = true;
+            bruiit.gloria.Volume = 20;
+            bruiit.gloria.Play();
+        }
+
+        public void stopTeme()
+        {
+            bruiit.gloria.Stop();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Game
 {
 	static class Program
 	{
-        const int nbrSanic = 2;
+        const int nbrSanic = 1;
         const int largFen = 1120;
         const float ratioVoulu = 16f / 9f;
 
@@ -56,6 +56,24 @@ namespace Game
                 sanic[0].stopTeme();
                 sanic.Clear();
                 window.Dispose();
+            }
+            else
+            {
+                Squidnic squid;
+                squid = new Squidnic(window);
+                squid.playTeme();
+                while (window.IsOpen)
+                {
+                    squid.update();
+                    window.Clear();
+                    window.Draw(background);
+
+                    window.Draw(squid);
+                    window.Display();
+                    window.DispatchEvents();
+                }
+                window.Dispose();
+                squid.stopTeme();
             }
             return 0;
 		}
