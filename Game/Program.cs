@@ -13,8 +13,8 @@ namespace Game
 {
 	static class Program
 	{
-        const int nbrSanic = 1;
-        const int largFen = 1120;
+        const int nbrSanic = 0;
+        const int largFen = 1000;
         const float ratioVoulu = 16f / 9f;
 
         private static RenderWindow window;

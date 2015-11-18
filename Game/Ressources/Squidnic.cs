@@ -52,7 +52,7 @@ namespace Game
             currentSpriteBody.Origin = new Vector2f(imajes.squidBody.GetLocalBounds().Width / 2, imajes.squidBody.GetLocalBounds().Height / 2);
 
             currentSpriteFace = imajes.squidFace;
-            currentSpriteFace.Origin = new Vector2f(-5+(imajes.squidFace.GetLocalBounds().Width / 2), -2+(imajes.squidFace.GetLocalBounds().Height / 2));
+            currentSpriteFace.Origin = new Vector2f(-2+(imajes.squidFace.GetLocalBounds().Width / 2), -1+(imajes.squidFace.GetLocalBounds().Height / 2));
 
             bruiit.squid_step.Loop = true;
             bruiit.squid_step.Volume = 10;
