@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Game
 {
@@ -48,13 +47,13 @@ namespace Game
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
 
-        private static Sosn bruiit = new Sosn();
+        static private Sosn bruiit = new Sosn();
         private static Spiirtes imaje = new Spiirtes();
 
 		private readonly List<Sound> sanicQuote = new List<Sound>();
-		private readonly Sound spenSound = new Sound();
-		private readonly Sound jamp = new Sound();
-		private readonly Sound ren = new Sound();
+		private readonly Sound spenSound;
+        private readonly Sound jamp;
+		private readonly Sound ren;
         private readonly Sound bump;
 		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
@@ -92,7 +91,7 @@ namespace Game
 		{
 			if (spen_sped > 60)
 			{
-				sanic_sped = new Vector2f(Face() * (spen_sped + 20), sanic_sped.Y);
+                sanic_sped.X = Face() * (spen_sped + 20);
 			}
 			run();
 		}
@@ -105,7 +104,6 @@ namespace Game
 			}
 			if (Position.X < 0)
 			{
-				//sanic.Position = new Vector2f(0, sanic.Position.Y);
                 sanic_sped.X = Math.Abs(sanic_sped.X);
 				//sanic_sped.X = (int)(Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
                 bump.Play();
@@ -113,9 +111,8 @@ namespace Game
 			}
 			else if (Position.X + Size.X > window.Size.X)
 			{
-				//sanic.Position = new Vector2f(window.Size.X - sanic.GetGlobalBounds().Width, sanic.Position.Y);
                 sanic_sped.X = -Math.Abs(sanic_sped.X);
-                //sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9);//corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
+                //sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
                 bump.Play();
 				orientation = -1;
 			}
@@ -132,7 +129,7 @@ namespace Game
 			ren.Stop();
 			spen_sped = 0;
 			spenSound.Stop();
-			sanic_sped = new Vector2f(0, sanic_sped.Y);
+			sanic_sped.X = 0;
 			state = State.Ducking;
 		}
 
@@ -180,7 +177,7 @@ namespace Game
 		{
 			currentSprite = sanicBall;
 			ren.Stop();
-			sanic_sped += new Vector2f(0, -25);
+			sanic_sped.Y += -25;
 			jamp.Play();
 			state = State.Jumping;
 		}
@@ -205,7 +202,7 @@ namespace Game
 
 			if (isGrounded())
 			{
-				Position = new Vector2f(Position.X, window.Size.Y - Size.Y);
+				Position.Y = window.Size.Y - Size.Y;
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				if (isMovingX())
 				{
@@ -317,8 +314,8 @@ namespace Game
 			Rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
 
-			//if (spen_sped < 60)
-			if (true)  //For funny wierd shit
+			if (spen_sped < 60)
+			//if (true)  //For funny wierd shit
 			{
 				spen_sped += 0.3f;
 			}
@@ -388,10 +385,20 @@ namespace Game
 		private void UpdateSprite()
 
 		{
-			Scale = new Vector2f(orientation,Scale.Y);			//Flip sprite
+			Scale.X = orientation;			//Flip sprite
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 			currentSprite.Scale = Scale;
 		}
+
+        public void playTeme()
+        {
+            bruiit.playTeme();
+        }
+
+        public void stopTeme()
+        {
+            bruiit.stopTeme();
+        }
 	}
 }
