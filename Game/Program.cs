@@ -16,39 +16,16 @@ namespace Game
 	{
 		static int Main()
         {
-            int nbrSanic = 6;
-
-            int largFen = 1120;
+            int nbrSanic = 1;
+            
+            int hautFen = 900;
+            bool fullscreen = false;
             float ratioVoulu = 16f / 9f;
 
-			//Intro Nega de NEGA nigga bitch nega!
-			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second+3))));
-			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
-			RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300), 
-																	   (uint)(nega.GetGlobalBounds().Height + 300)), 
-														                "", Styles.None);
-			splashScreen.Clear(Color.Blue);
-			
-			nega.Position = new Vector2f(150, 150);
-			splashScreen.Draw(nega);
+            intro();
 
-			List<Sound> scream = new List<Sound>();
-			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
-			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
-
-			int i = rand.Next(scream.Count);
-			scream.ElementAt(i).Loop = false;
-
-			scream.ElementAt(i).Play();            
-
-			splashScreen.Display();
-
-			
-			System.Threading.Thread.Sleep(2000);
-			splashScreen.Close();
-			//fin de l'intro-------------------------------------------------------------------
-
-			RenderWindow window = new RenderWindow(new VideoMode((uint)largFen, (uint)(Math.Round(largFen/ratioVoulu))), "SANIC SPED!!", Styles.Close);
+			RenderWindow window = new RenderWindow(new VideoMode((uint)(Math.Round(hautFen*ratioVoulu)), (uint)hautFen), "SANIC SPED!!", fullscreen ? Styles.Fullscreen : /**/Styles.None); //Changer "Styles.None" pour "Styles.Close" pour récupérer le bouton pour fermer la fenêtre
+            
 			window.Closed += new EventHandler(OnClose);
 			window.SetFramerateLimit(60);
 			window.SetKeyRepeatEnabled(false);
@@ -85,9 +62,41 @@ namespace Game
 				    window.Draw(s);
                 }
 				window.Display();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    window.Close();
+                }
 			}
             return 0;
 		}
+
+        static void intro()
+        {
+            Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second + 3))));
+            Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
+            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300),
+                                                                       (uint)(nega.GetGlobalBounds().Height + 300)),
+                                                                        "", Styles.None);
+            splashScreen.Clear(Color.Blue);
+
+            nega.Position = new Vector2f(150, 150);
+            splashScreen.Draw(nega);
+
+            List<Sound> scream = new List<Sound>();
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
+
+            int i = rand.Next(scream.Count);
+            scream.ElementAt(i).Loop = false;
+
+            scream.ElementAt(i).Play();
+
+            splashScreen.Display();
+
+
+            System.Threading.Thread.Sleep(2000);
+            splashScreen.Close();
+        }
 
 		static void OnClose(object sender, EventArgs e)
 		{
