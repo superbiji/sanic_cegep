@@ -116,6 +116,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Ressources\Background.jpg" />
+    <Content Include="Ressources\gloria.wav" />
     <Content Include="Ressources\GottaGoFast.wav" />
     <Content Include="Ressources\Intro.wav" />
     <Content Include="Ressources\nEGA.png" />
