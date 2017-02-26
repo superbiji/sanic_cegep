@@ -72,7 +72,7 @@ namespace Game
             }
             else
             {
-                teme.Volume = 90;
+                teme.Volume = 60;
                 Squidnic s = new Squidnic(window);
                 teme.Play();
 

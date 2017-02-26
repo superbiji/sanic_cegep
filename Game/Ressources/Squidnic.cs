@@ -37,7 +37,7 @@ namespace Game
 
         private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
         private float Rotation = 0;
-        private State state = State.Standing;
+      //  private State state = State.Standing;
 
         public Vector2f Position = new Vector2f(200, 200);
         private Vector2f Scale = new Vector2f(1, 1);
@@ -105,9 +105,7 @@ namespace Game
 
         private void running()
         {
-            bruiit.ren.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
             squid_sped += ACCELERATION_X;
-            bruiit.squid_step.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
         }
 
         private void run()
@@ -126,18 +124,40 @@ namespace Game
             running();
         }
 
+        private void stand()
+        {
+            squid_sped.X /= 1.05f;
+        }
+
+        private void jump()
+        {
+            squid_sped.Y = -30;
+            bruiit.jamp.Play();
+        }
+
         public void update()
         {
             if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
             {
                 run();
             }
+            else if ((Keyboard.IsKeyPressed(Keyboard.Key.Up)) && isGrounded())
+            {
+                jump();
+            }
+            else
+            {
+                stand();
+            }
+            bruiit.ren.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
+            bruiit.squid_step.Pitch = 1f + Math.Abs(squid_sped.X) / ACCELERATION_X.X / 33;
 
 
             Rotation = Position.X;
             currentSpriteBody.Rotation = Rotation;
             collision();
-            Position += orientation*squid_sped;
+            Position.X += orientation*squid_sped.X;
+            Position.Y += squid_sped.Y;
             UpdateSprite();
         }
 
