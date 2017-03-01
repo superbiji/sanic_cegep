@@ -47,14 +47,14 @@ namespace Game
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
 
-        static private Sosn bruiit = new Sosn();
-        private static Spiirtes imaje = new Spiirtes();
+		static private Sosn bruiit = new Sosn();
+		private static Spiirtes imaje = new Spiirtes();
 
 		private readonly List<Sound> sanicQuote = new List<Sound>();
 		private readonly Sound spenSound;
-        private readonly Sound jamp;
+		private readonly Sound jamp;
 		private readonly Sound ren;
-        private readonly Sound bump;
+		private readonly Sound bump;
 		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
@@ -62,18 +62,18 @@ namespace Game
 		{
 			window = rw;
 
-            sanic = imaje.sanic;
+			sanic = imaje.sanic;
 			sanicBall = imaje.sanicBall;
 			sanicDuck = imaje.sanicDuck;
 
 
-            sanicQuote = bruiit.sanicQuote;
-            jamp = bruiit.jamp;
-            ren = bruiit.ren;
-            spenSound = bruiit.spenSound;
-            bump = bruiit.bump;
+			sanicQuote = bruiit.sanicQuote;
+			jamp = bruiit.jamp;
+			ren = bruiit.ren;
+			spenSound = bruiit.spenSound;
+			bump = bruiit.bump;
 
-            bump.Loop = false;
+			bump.Loop = false;
 			ren.Loop = true;
 			spenSound.Loop = true;
 
@@ -91,7 +91,7 @@ namespace Game
 		{
 			if (spen_sped > 60)
 			{
-                sanic_sped.X = Face() * (spen_sped + 20);
+				sanic_sped.X = Face() * (spen_sped + 20);
 			}
 			run();
 		}
@@ -104,16 +104,16 @@ namespace Game
 			}
 			if (Position.X < 0)
 			{
-                sanic_sped.X = Math.Abs(sanic_sped.X);
+				sanic_sped.X = Math.Abs(sanic_sped.X);
 				//sanic_sped.X = (int)(Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-                bump.Play();
+				bump.Play();
 				orientation = 1;
 			}
 			else if (Position.X + Size.X > window.Size.X)
 			{
-                sanic_sped.X = -Math.Abs(sanic_sped.X);
-                //sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-                bump.Play();
+				sanic_sped.X = -Math.Abs(sanic_sped.X);
+				//sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
+				bump.Play();
 				orientation = -1;
 			}
 		}
@@ -146,10 +146,10 @@ namespace Game
 			}
 		}
 
-        public int duckWidth()
-        {
-            return (int)(sanicDuck.Texture.Size.X);
-        }
+		public int duckWidth()
+		{
+			return (int)(sanicDuck.Texture.Size.X);
+		}
 
 		private int Face()
 		{
@@ -350,7 +350,7 @@ namespace Game
 			}
 		}
 
-		public void Update()
+		public void update()
 		{
 			switch (state)
 			{
@@ -391,14 +391,14 @@ namespace Game
 			currentSprite.Scale = Scale;
 		}
 
-        public void playTeme()
-        {
-            bruiit.playTeme();
-        }
+		public void playTeme()
+		{
+			bruiit.playTeme();
+		}
 
-        public void stopTeme()
-        {
-            bruiit.stopTeme();
-        }
+		public void stopTeme()
+		{
+			bruiit.stopTeme();
+		}
 	}
 }

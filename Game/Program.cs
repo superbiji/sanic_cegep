@@ -12,121 +12,48 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    static class Program
-    {
-        static int Main()
-        {
-            int nbrSanic = 0;
+	static class Program
+	{
+		static int Main()
+		{
+			UInt32 hautFen = 600;
+			double ratioVoulu = 16.0 / 9.0;
+			UInt32 largeurFen = (UInt32)(hautFen * ratioVoulu);
 
-            int hautFen = 900;
-            bool fullscreen = false;
-            float ratioVoulu = 16f / 9f;
+			intro();
 
-            intro();
+			Game game = new Game(largeurFen, hautFen, "test");
+			game.loop();
 
-            RenderWindow window = new RenderWindow(new VideoMode((uint)(Math.Round(hautFen * ratioVoulu)), (uint)hautFen), "SANIC SPED!!", fullscreen ? Styles.Fullscreen : /**/Styles.None); //Changer "Styles.None" pour "Styles.Close" pour récupérer le bouton pour fermer la fenêtre
+			return 0;
+		}
 
-            window.Closed += new EventHandler(OnClose);
-            window.SetFramerateLimit(60);
-            window.SetKeyRepeatEnabled(false);
+		static void intro()
+		{
+			Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second + 3))));
+			Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
+			RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300),
+																	   (uint)(nega.GetGlobalBounds().Height + 300)),
+																		"", Styles.None);
+			splashScreen.Clear(Color.Blue);
 
-            Music teme = nbrSanic <= 0 ? new Music(@"..\..\Ressources\gloria.wav") : new Music(@"..\..\Ressources\SanicMusic.wav");
-            teme.Volume = 10;
-            teme.Loop = true;
+			nega.Position = new Vector2f(150, 150);
+			splashScreen.Draw(nega);
 
-            Sprite background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-            background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
+			List<Sound> scream = new List<Sound>();
+			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
+			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
 
+			int i = rand.Next(scream.Count);
+			scream.ElementAt(i).Loop = false;
 
-            if (nbrSanic > 0)
-            {
-                teme.Volume = 10;
-                //Liste pour le loll MOUHAHAHAHAHA
-                List<Sanic> sanic = new List<Sanic>();
-                for (int ji = 0; ji < nbrSanic; ji++)
-                {
-                    sanic.Add(new Sanic(window));
-                    float posX = ((window.Size.X - sanic[ji].Size.X) * (ji + 1) / (1 + nbrSanic));
-                    sanic[ji].Position = new Vector2f(posX, 0);
-                }
-                teme.Play();
-                sanic[0].Quote(0);
+			scream.ElementAt(i).Play();
 
-                while (window.IsOpen)
-                {
-                    window.DispatchEvents();
-
-                    window.Clear();
-                    window.Draw(background);
-                    foreach (Sanic s in sanic)
-                    {
-                        s.Update();
-                        window.Draw(s);
-                    }
-                    window.Display();
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                    {
-                        window.Close();
-                    }
-                }
-            }
-            else
-            {
-                teme.Volume = 60;
-                Squidnic s = new Squidnic(window);
-                teme.Play();
-
-                while (window.IsOpen)
-                {
-                    window.DispatchEvents();
-
-                    window.Clear();
-                    window.Draw(background);
-                    s.update();
-                    window.Draw(s);
-                    window.Display();
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                    {
-                        window.Close();
-                    }
-                }
-
-            }
-            return 0;
-        }
-
-        static void intro()
-        {
-            Random rand = new Random((int)Math.Round((Double)(Mouse.GetPosition().X / (DateTime.Today.Second + 3))));
-            Sprite nega = new Sprite(new Texture(@"..\..\Ressources\nEGA.png"));
-            RenderWindow splashScreen = new RenderWindow(new VideoMode((uint)(nega.GetGlobalBounds().Width + 300),
-                                                                       (uint)(nega.GetGlobalBounds().Height + 300)),
-                                                                        "", Styles.None);
-            splashScreen.Clear(Color.Blue);
-
-            nega.Position = new Vector2f(150, 150);
-            splashScreen.Draw(nega);
-
-            List<Sound> scream = new List<Sound>();
-            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
-            scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
-
-            int i = rand.Next(scream.Count);
-            scream.ElementAt(i).Loop = false;
-
-            scream.ElementAt(i).Play();
-
-            splashScreen.Display();
+			splashScreen.Display();
 
 
-            System.Threading.Thread.Sleep(2000);
-            splashScreen.Close();
-        }
-
-        static void OnClose(object sender, EventArgs e)
-        {
-            RenderWindow window = (RenderWindow)sender;
-            window.Close();
-        }
-    }
+			System.Threading.Thread.Sleep(2000);
+			splashScreen.Close();
+		}
+	}
 }
