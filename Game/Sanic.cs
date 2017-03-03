@@ -56,20 +56,19 @@ namespace Game
 		private readonly Sound jamp;
 		private readonly Sound ren;
 		private readonly Sound bump;
-		private readonly Vector2f ACCELERATION_X = new Vector2f(2, 0);
+		private readonly Vector2f ACCELERATION_X = new Vector2f(0.5f, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
 		public Sanic(RenderWindow rw)
 		{
 			window = rw;
 
-			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 310, 322));
+			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
 			sanic = imaje.sanic;
 			sanicBall = imaje.sanicBall;
-			sanicDuck = imaje.sanicDuck;
-
-
+			sanicDuck = imaje.sanicDuck;			
+			
 			sanicQuote = bruiit.sanicQuote;
 			jamp = bruiit.jamp;
 			ren = bruiit.ren;
@@ -84,6 +83,7 @@ namespace Game
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
 			sanicDuck.Origin = new Vector2f(sanicDuck.GetLocalBounds().Width / 2, sanicDuck.GetLocalBounds().Height / 2);
+			sheet.Origin = new Vector2f(sheet.GetLocalBounds().Width / 2, sheet.GetLocalBounds().Height / 2);
 
 			stand();
 		}
@@ -123,9 +123,6 @@ namespace Game
 
 		public void Draw(RenderTarget target, RenderStates states)
 		{
-			sheet.Position = new Vector2f(currentSprite.GetGlobalBounds().Left, currentSprite.GetGlobalBounds().Top - sheet.GetGlobalBounds().Height);
-			sheet.Draw(target, states);
-
 			currentSprite.Draw(target, states);
 		}
 	
@@ -255,7 +252,7 @@ namespace Game
 
 		private void run()
 		{
-			currentSprite = sanic;
+			currentSprite = sheet;
 			ren.Play();
 			spen_sped = 0;
 			spenSound.Stop();
@@ -266,6 +263,7 @@ namespace Game
 		{
 			raise();
 			ren.Pitch = 1f + Math.Abs(sanic_sped.X) / ACCELERATION_X.X / 33;
+			sheet.next(0.5);
 			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
 			{
 				jump();
@@ -389,12 +387,12 @@ namespace Game
 		}
 
 		private void UpdateSprite()
-
 		{
 			Scale.X = orientation;			//Flip sprite
+			currentSprite.Scale = Scale;
+
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
-			currentSprite.Scale = Scale;
 		}
 
 		public void playTeme()
