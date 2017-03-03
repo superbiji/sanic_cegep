@@ -20,23 +20,22 @@ namespace Game
 		{
 			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
 
-			Random random = new Random();
-			Music teme = random.Next(2) == 0 ? new Music(@"..\..\Ressources\gloria.wav") : new Music(@"..\..\Ressources\SanicMusic.wav");
+			sanic = new Sanic(window);
+
+			Music teme = sanic is Squidnic ? new Music(@"..\..\Ressources\gloria.wav") : new Music(@"..\..\Ressources\SanicMusic.wav");
 			teme.Volume = 30;
 			teme.Loop = true;
 
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);
-
+			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);			
 			
-			sanic = new Sanic(window);
 			teme.Play();
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			window.Draw(background);
-			window.Draw(sanic);
+			background.Draw(target, states);
+			sanic.Draw(target, states);
 		}
 
 		public new int update(int elapsedMilliseconds)

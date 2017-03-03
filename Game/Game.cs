@@ -42,7 +42,7 @@ namespace Game
 				{
 					window.Close();
 				}
-
+				
 				window.Clear();
 				window.Draw(sanicScene);
 				window.Display();
