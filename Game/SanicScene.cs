@@ -34,7 +34,8 @@ namespace Game
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			View camera = new View(sanic.Position, new Vector2f(window.Size.X, window.Size.Y) * 2);
+			View camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y) * 2);
+			camera.Rotation = sanic.Rotation;
 			target.SetView(camera);
 
 			background.Draw(target, states);

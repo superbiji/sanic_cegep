@@ -23,7 +23,11 @@ namespace Game
 		public Vector2f Position = new Vector2f(0, 0);
 		private Vector2f Scale = new Vector2f(1, 1);
 		private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
-		private float Rotation = 0;
+		public float Rotation
+		{
+			get;
+			private set;
+		} = 0;
 		private State state = State.Standing;
 		
 		public Vector2f Size
