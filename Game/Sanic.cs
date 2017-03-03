@@ -38,6 +38,7 @@ namespace Game
 			}
 		}
 
+		private Animation sheet;
 		private Sprite currentSprite;
 		private float spen_sped = 0f;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
@@ -61,6 +62,8 @@ namespace Game
 		public Sanic(RenderWindow rw)
 		{
 			window = rw;
+
+			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 310, 322));
 
 			sanic = imaje.sanic;
 			sanicBall = imaje.sanicBall;
@@ -120,6 +123,9 @@ namespace Game
 
 		public void Draw(RenderTarget target, RenderStates states)
 		{
+			sheet.Position = new Vector2f(currentSprite.GetGlobalBounds().Left, currentSprite.GetGlobalBounds().Top - sheet.GetGlobalBounds().Height);
+			sheet.Draw(target, states);
+
 			currentSprite.Draw(target, states);
 		}
 	
