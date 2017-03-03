@@ -23,7 +23,7 @@ namespace Game
 			sanic = new Sanic(window);
 
 			Music teme = sanic is Squidnic ? new Music(@"..\..\Ressources\gloria.wav") : new Music(@"..\..\Ressources\SanicMusic.wav");
-			teme.Volume = 30;
+			teme.Volume = 10;
 			teme.Loop = true;
 
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
@@ -34,6 +34,9 @@ namespace Game
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
+			View camera = new View(new FloatRect(0, 0, sanic.Position.X * 2, sanic.Position.Y * 2));
+			target.SetView(camera);
+
 			background.Draw(target, states);
 			sanic.Draw(target, states);
 		}

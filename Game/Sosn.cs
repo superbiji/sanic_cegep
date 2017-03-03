@@ -30,17 +30,5 @@ namespace Game
 			teme = new Sound(new SoundBuffer(@"..\..\Ressources\SanicMusic.wav"));
 			gloria = new Sound(new SoundBuffer(@"..\..\Ressources\Gloria.wav"));
 		}
-
-		public void playTeme()
-		{
-			teme.Volume = 10;
-			teme.Loop = true;
-			teme.Play();
-		}
-
-		public void stopTeme()
-		{
-			teme.Stop();
-		}
 	}
 }

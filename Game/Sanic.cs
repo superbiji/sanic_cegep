@@ -394,15 +394,5 @@ namespace Game
 			currentSprite.Position = Position + currentSprite.Origin;
 			currentSprite.Rotation = Rotation;
 		}
-
-		public void playTeme()
-		{
-			bruiit.playTeme();
-		}
-
-		public void stopTeme()
-		{
-			bruiit.stopTeme();
-		}
 	}
 }
