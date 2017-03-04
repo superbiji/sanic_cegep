@@ -37,6 +37,8 @@ namespace Game
 			}
 		}
 
+
+		//TODO: Implement good game loop
 		public void loop()
 		{
 			Clock clock = new Clock();

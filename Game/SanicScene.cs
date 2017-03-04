@@ -12,6 +12,7 @@ namespace Game
 {
 	public class SanicScene : Scene
 	{
+		protected float ratio;
 		protected View camera;
 		protected FloatRect boundaries;
 		protected Sprite background;
@@ -23,6 +24,8 @@ namespace Game
 			: base(window)
 		{
 			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
+
+			ratio = window.Size.X / window.Size.Y;
 
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale *= 3;
@@ -65,7 +68,7 @@ namespace Game
 
 		public override int update(int elapsedMilliseconds)
 		{
-			base.update(elapsedMilliseconds);
+			int updateResult = base.update(elapsedMilliseconds);
 
 			sanic.Grounded = false;
 
@@ -127,12 +130,28 @@ namespace Game
 				squidnic.turn();
 			}
 
-			return 0;
+			return updateResult;
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			camera.Center = new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2));
+			float x1 = Math.Min(sanic.Position.X, squidnic.Position.X);
+			float x2 = Math.Max(sanic.Position.X + sanic.Size.X, squidnic.Position.X + squidnic.Size.X);
+			float y1 = Math.Min(sanic.Position.Y, squidnic.Position.Y);
+			float y2 = Math.Max(sanic.Position.Y + sanic.Size.Y, squidnic.Position.Y + squidnic.Size.Y);
+			float cameraWidth = Math.Max(x2 - x1 + 300, 500);
+			float cameraHeight = Math.Max(y2 - y1 + 300, 500); ;
+			if (cameraHeight < cameraWidth / ratio)
+			{
+				cameraHeight = cameraWidth / ratio;
+			}
+			else
+			{
+				cameraWidth = cameraHeight * ratio;
+			}
+
+			camera.Size = new Vector2f(cameraWidth, cameraHeight);
+			camera.Center = new Vector2f(((x2 - x1) / 2) + x1, ((y2 - y1) / 2) + y1);
 			//camera.Rotation = sanic.Rotation; //LOLOLOLOL
 			target.SetView(camera);
 
