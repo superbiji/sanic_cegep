@@ -16,6 +16,7 @@ namespace Game
 		protected FloatRect boundaries;
 		protected Sprite background;
 		protected Sanic sanic;
+		protected Squidnic squidnic;
 		protected List<RectangleShape> plateformes = new List<RectangleShape>();
 
 		public SanicScene(RenderWindow window)
@@ -28,6 +29,7 @@ namespace Game
 			boundaries = background.GetGlobalBounds();
 	
 			sanic = new Sanic();
+			squidnic = new Squidnic(window);
 			camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
 
 			RectangleShape box = new RectangleShape(new Vector2f(300, 50));
@@ -51,9 +53,10 @@ namespace Game
 			teme.Play();
 
 			updatables.Add(sanic);
-			drawables.Add(BACKGROUND, background);
+			updatables.Add(squidnic);
 			drawables.Add(FOREGROUND, sanic);
-
+			drawables.Add(FOREGROUND, squidnic);
+			drawables.Add(BACKGROUND, background);
 			foreach (RectangleShape plateforme in plateformes)
 			{
 				drawables.Add(MIDDLEGROUND, plateforme);
@@ -93,6 +96,35 @@ namespace Game
 			else if (sanic.Position.X + sanic.Size.X > boundaries.Width)
 			{
 				sanic.turnLeft();
+			}
+
+			//DOUBLE THE TROUBLE
+			squidnic.Grounded = false;
+
+			if (squidnic.Speed.Y >= 0)
+			{
+				if (squidnic.Position.Y + squidnic.Size.Y >= boundaries.Height)
+				{
+					squidnic.Grounded = true;
+					squidnic.Position.Y = boundaries.Height - squidnic.Size.Y;
+				}
+				else
+				{
+					foreach (RectangleShape plateforme in plateformes)
+					{
+						if (squidnic.boundaries.Intersects(plateforme.GetGlobalBounds()))
+						{
+							squidnic.Grounded = true;
+							squidnic.Position.Y = plateforme.GetGlobalBounds().Top - squidnic.Size.Y + 1;
+						}
+					}
+				}
+			}
+
+			if ((squidnic.Position.X - squidnic.Origin.X <= 0) ||
+				(squidnic.Position.X + squidnic.Origin.X >= boundaries.Width))
+			{
+				squidnic.turn();
 			}
 
 			return 0;

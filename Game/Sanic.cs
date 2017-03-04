@@ -41,22 +41,10 @@ namespace Game
 				currentSprite.Scale = new Vector2f(value.X / currentSprite.GetLocalBounds().Width, value.Y / currentSprite.GetLocalBounds().Height);
 			}
 		}
-
-		private bool grounded = false;
 		public bool Grounded
 		{
-			get
-			{
-				return grounded;
-			}
-			set
-			{
-				grounded = value;
-				if (grounded)
-				{
-					Speed.Y = 0;
-				}
-			}
+			get;
+			set;
 		}
 
 		private Animation sheet;
@@ -69,9 +57,6 @@ namespace Game
 			get
 			{
 				return currentSprite.GetGlobalBounds();
-			}
-			private set
-			{
 			}
 		}
 		private readonly Sprite sanic;
@@ -107,6 +92,7 @@ namespace Game
 			ren.Loop = true;
 			spenSound.Loop = true;
 
+			Grounded = false;
 			Rotation = 0;
 			Speed = new Vector2f(0, 0);
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
@@ -147,6 +133,10 @@ namespace Game
 			if (!Grounded)
 			{
 				fall();
+			}
+			else
+			{
+				Speed.Y = Speed.Y < 0 ? Speed.Y : 0;
 			}
 		}
 
