@@ -25,7 +25,7 @@ namespace Game
 		{
 			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
 
-			ratio = window.Size.X / window.Size.Y;
+			ratio = (float)window.Size.X / (float)window.Size.Y;
 
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale *= 3;
