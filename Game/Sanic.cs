@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Game
 {
-	public class Sanic : Drawable
+	public class Sanic : Updatable, Drawable
 	{
 		private enum State
 		{
@@ -27,7 +27,7 @@ namespace Game
 		{
 			get;
 			private set;
-		} = 0;
+		}
 		private State state = State.Standing;
 		
 		public Vector2f Size
@@ -47,7 +47,11 @@ namespace Game
 		private float spen_sped = 0f;
 		private Vector2f sanic_sped = new Vector2f(0, 0);
 
-		private readonly RenderWindow window;
+		public FloatRect boundaries
+		{
+			get;
+			private set;
+		}
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
 		private readonly Sprite sanicDuck;
@@ -63,9 +67,11 @@ namespace Game
 		private readonly Vector2f ACCELERATION_X = new Vector2f(0.5f, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
-		public Sanic(RenderWindow rw)
+		public Sanic(FloatRect boundaries)
 		{
-			window = rw;
+			this.boundaries = boundaries;
+
+			Rotation = 0;
 
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
@@ -116,7 +122,7 @@ namespace Game
 				bump.Play();
 				orientation = 1;
 			}
-			else if (Position.X + Size.X > window.Size.X)
+			else if (Position.X + Size.X > boundaries.Width)
 			{
 				sanic_sped.X = -Math.Abs(sanic_sped.X);
 				//sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
@@ -143,11 +149,11 @@ namespace Game
 		private void ducking()
 		{
 			raise();
-			if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
+			if ((Keyboard.IsKeyPressed(Keyboard.Key.D)) || (Keyboard.IsKeyPressed(Keyboard.Key.A)))
 			{
 				spin();
 			}
-			else if (!Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			else if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
 				stand();
 			}
@@ -163,7 +169,7 @@ namespace Game
 			return Scale.X < 0 ? -1 : 1;
 		}
 
-		private void fall()
+		protected void fall()
 		{
 			currentSprite = sanicBall;
 			ren.Stop();
@@ -172,7 +178,7 @@ namespace Game
 
 		private bool isGrounded()
 		{
-			return Position.Y + Size.Y >= window.Size.Y;
+			return Position.Y + Size.Y >= boundaries.Height;
 		}
 
 		private bool isMovingX()
@@ -194,11 +200,11 @@ namespace Game
 			sanic_sped += GRAVITY;
 			Rotation += 2.5f * sanic_sped.X / ACCELERATION_X.X;
 
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) 
+			if (Keyboard.IsKeyPressed(Keyboard.Key.D)) 
 			{
 				sanic_sped += ACCELERATION_X;
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.A))
 			{
 				sanic_sped -= ACCELERATION_X;
 			}
@@ -209,7 +215,7 @@ namespace Game
 
 			if (isGrounded())
 			{
-				Position.Y = window.Size.Y - Size.Y;
+				Position.Y = boundaries.Height - Size.Y;
 				sanic_sped.Y = sanic_sped.Y < 0 ? sanic_sped.Y : 0;
 				if (isMovingX())
 				{
@@ -268,19 +274,19 @@ namespace Game
 			raise();
 			ren.Pitch = 1f + Math.Abs(sanic_sped.X) / ACCELERATION_X.X / 33;
 			sheet.next(0.5);
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+			if (Keyboard.IsKeyPressed(Keyboard.Key.W))
 			{
 				jump();
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
 				duck();
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) 
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.D)) 
 			{
 				sanic_sped += ACCELERATION_X;
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.A))
 			{
 				sanic_sped -= ACCELERATION_X;
 			}
@@ -327,7 +333,7 @@ namespace Game
 			{
 				spen_sped += 0.3f;
 			}
-			if (!Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
 				boost();
 			}
@@ -344,21 +350,31 @@ namespace Game
 		{
 			raise();
 			sanic_sped.X = Math.Round(sanic_sped.X) == 0 ? 0 : sanic_sped.X / 1.1f;
-			if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+			if (Keyboard.IsKeyPressed(Keyboard.Key.W))
 			{
 				jump();
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.Down))
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
 				duck();
 			}
-			else if ((Keyboard.IsKeyPressed(Keyboard.Key.Right)) || (Keyboard.IsKeyPressed(Keyboard.Key.Left)))
+			else if ((Keyboard.IsKeyPressed(Keyboard.Key.D)) || (Keyboard.IsKeyPressed(Keyboard.Key.A)))
 			{
 				run();
 			}
 		}
+		
 
-		public void update()
+		private void UpdateSprite()
+		{
+			Scale.X = orientation;			//Flip sprite
+			currentSprite.Scale = Scale;
+
+			currentSprite.Position = Position + currentSprite.Origin;
+			currentSprite.Rotation = Rotation;
+		}
+
+		public int update(int elapsedMilliseconds)
 		{
 			switch (state)
 			{
@@ -388,15 +404,8 @@ namespace Game
 			Position += sanic_sped;
 
 			UpdateSprite();
-		}
 
-		private void UpdateSprite()
-		{
-			Scale.X = orientation;			//Flip sprite
-			currentSprite.Scale = Scale;
-
-			currentSprite.Position = Position + currentSprite.Origin;
-			currentSprite.Rotation = Rotation;
+			return 0;
 		}
 	}
 }

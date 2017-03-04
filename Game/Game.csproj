@@ -87,6 +87,7 @@
     <Compile Include="Scene.cs" />
     <Compile Include="Sosn.cs" />
     <Compile Include="Spiirtes.cs" />
+    <Compile Include="Updatable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

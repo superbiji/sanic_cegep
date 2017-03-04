@@ -12,6 +12,8 @@ namespace Game
 {
 	public class SanicScene : Scene
 	{
+		protected View camera;
+		protected FloatRect boundaries;
 		protected Sprite background;
 		protected Sanic sanic;
 
@@ -20,22 +22,24 @@ namespace Game
 		{
 			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
 
-			sanic = new Sanic(window);
-
+			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
+			background.Scale *= 3;
+			boundaries = background.GetGlobalBounds();
+	
+			sanic = new Sanic(boundaries);
+			camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y));
 			Music teme = sanic is Squidnic ? new Music(@"..\..\Ressources\gloria.wav") : new Music(@"..\..\Ressources\SanicMusic.wav");
+
 			teme.Volume = 10;
 			teme.Loop = true;
 
-			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-			background.Scale = new Vector2f(window.Size.X / background.GetLocalBounds().Width, window.Size.Y / background.GetLocalBounds().Height);			
-			
 			teme.Play();
 		}
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			View camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y) * 2);
-			camera.Rotation = sanic.Rotation;
+			camera.Center = new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2));
+			//camera.Rotation = sanic.Rotation; //LOLOLOLOL
 			target.SetView(camera);
 
 			background.Draw(target, states);
@@ -44,7 +48,8 @@ namespace Game
 
 		public new int update(int elapsedMilliseconds)
 		{
-			sanic.update();
+			sanic.update(elapsedMilliseconds);
+
 			return base.update(elapsedMilliseconds);
 		}
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-	public abstract class Scene : Drawable
+	public abstract class Scene : Updatable, Drawable
 	{
 		public static readonly int NO_STATE = 0;
 		public static readonly int EXIT_STATE = 1;
