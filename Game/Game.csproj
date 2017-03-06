@@ -81,15 +81,17 @@
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ressources\Squidnic.cs" />
+    <Compile Include="Squidnic.cs" />
     <Compile Include="Sanic.cs" />
     <Compile Include="SanicScene.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Sosn.cs" />
     <Compile Include="Spiirtes.cs" />
+    <Compile Include="Updatable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Ressources\squidnic.pdn" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="csfml-audio-2.dll">
@@ -120,17 +122,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Ressources\Background.jpg" />
+    <Content Include="Ressources\bump.wav" />
     <Content Include="Ressources\gloria.wav" />
     <Content Include="Ressources\GottaGoFast.wav" />
     <Content Include="Ressources\Intro.wav" />
+    <Content Include="Ressources\Intro2.wav" />
     <Content Include="Ressources\nEGA.png" />
+    <Content Include="Ressources\sanic - Copie.png" />
     <Content Include="Ressources\sanic.png" />
+    <Content Include="Ressources\sanicDuck.png" />
     <Content Include="Ressources\SanicMusic.wav" />
+    <Content Include="Ressources\SanicQuote.wav" />
     <Content Include="Ressources\SanicSpen.wav" />
     <Content Include="Ressources\sanic_ball.png" />
     <Content Include="Ressources\sanic_jamp.wav" />
     <Content Include="Ressources\sanic_ren.wav" />
     <Content Include="Ressources\sanic_sheet.png" />
+    <Content Include="Ressources\squidnic_Bahdy.png" />
+    <Content Include="Ressources\squidnic_Fasse.png" />
+    <Content Include="Ressources\squid_step-ancien1.wav" />
+    <Content Include="Ressources\squid_step-ancien2.wav" />
+    <Content Include="Ressources\squid_step.wav" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

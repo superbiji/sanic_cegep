@@ -3,6 +3,7 @@ using SFML.System;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Game
 {
@@ -26,9 +27,24 @@ namespace Game
 		{
 		}
 
+		void renderingThread()
+		{
+			//while (window.IsOpen)
+			{
+				window.Clear();
+				window.Draw(sanicScene);
+				window.Display();
+			}
+		}
+
+
+		//TODO: Implement good game loop
 		public void loop()
 		{
 			Clock clock = new Clock();
+
+			//Thread thread = new Thread(renderingThread);
+			//thread.Start();
 
 			while (window.IsOpen)
 			{
@@ -42,10 +58,8 @@ namespace Game
 				{
 					window.Close();
 				}
-				
-				window.Clear();
-				window.Draw(sanicScene);
-				window.Display();
+
+				renderingThread();			
 			}
 		}
 
