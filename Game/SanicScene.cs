@@ -44,12 +44,14 @@ namespace Game
 			if (new Random().Next(8) == 0)
 			{
 				teme = new Music(@"..\..\Ressources\SanicMusic.wav");
-				teme.Volume = 10;
+				//teme.Volume = 5;/*    
+				teme.Volume = 0; //*/
 			}
 			else
 			{
-				teme = new Music(@"..\..\Ressources\gloria.wav");
-				teme.Volume = 30;
+                teme = new Music(@"..\..\Ressources\gloria.wav");
+                //teme.Volume = 30;/*    
+                teme.Volume = 0; //*/
 			}			
 			teme.Loop = true;
 
@@ -124,10 +126,13 @@ namespace Game
 				}
 			}
 
-			if ((squidnic.Position.X - squidnic.Origin.X <= 0) ||
-				(squidnic.Position.X + squidnic.Origin.X >= boundaries.Width))
+			if (squidnic.Position.X - squidnic.Origin.X <= 0)
+            {
+                squidnic.bounce(Orientation.DROITE);
+            }
+            else if(squidnic.Position.X + squidnic.Origin.X >= boundaries.Width)
 			{
-				squidnic.turn();
+                squidnic.bounce(Orientation.GAUCHE);
 			}
 
 			return updateResult;
