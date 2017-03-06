@@ -41,7 +41,7 @@ namespace Game
 			plateformes.Add(box);
 
 			Music teme;
-			if (new Random().Next(8) == 0)
+			if (new Random().Next(5) == 0)
 			{
 				teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 				teme.Volume = 10;
