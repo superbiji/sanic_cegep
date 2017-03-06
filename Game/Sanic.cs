@@ -27,7 +27,7 @@ namespace Game
 		{
 			get;
 			private set;
-		} = 0;
+		}
 		private State state = State.Standing;
 		
 		public Vector2f Size
@@ -66,6 +66,7 @@ namespace Game
 		public Sanic(RenderWindow rw)
 		{
 			window = rw;
+            Rotation = 0;
 
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
