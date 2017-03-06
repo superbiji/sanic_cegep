@@ -108,7 +108,7 @@ namespace Game
         public void bounce(Orientation pOri)
         {
             orientation = pOri;
-            Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 1f;
+            Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
             bruiit.bump.Play();
         }
 
@@ -151,7 +151,7 @@ namespace Game
         private void updateStep()
         {
             bruiit.squid_step.Pitch = 1f + Math.Abs(Speed.X) / 60;
-            if (Math.Abs(Speed.X) < 1)
+            if ((Math.Abs(Speed.X) < 1) || (!Grounded))
             {
                 bruiit.squid_step.Stop();
             }

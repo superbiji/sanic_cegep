@@ -20,9 +20,10 @@ namespace Game
 			double ratioVoulu = 16.0 / 9.0;
 			UInt32 largeurFen = (UInt32)(hautFen * ratioVoulu);
 
-			//intro();
+			intro();
 
 			Game game = new Game(largeurFen, hautFen, "test");
+
 			game.loop();
 
 			return 0;
