@@ -16,13 +16,13 @@ namespace Game
 	{
 		static int Main()
 		{
-			UInt32 hautFen = 600;
+			UInt32 hautFen = 1080;
 			double ratioVoulu = 16.0 / 9.0;
 			UInt32 largeurFen = (UInt32)(hautFen * ratioVoulu);
 
 			intro();
 
-			Game game = new Game(largeurFen, hautFen, "test");
+			Game game = new Game(largeurFen, hautFen, "test", Styles.Fullscreen);
 
 			game.loop();
 

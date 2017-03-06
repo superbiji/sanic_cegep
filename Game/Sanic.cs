@@ -46,6 +46,7 @@ namespace Game
 			get;
 			set;
 		}
+        private bool boostRedi = false;
 
 		private Animation sheet;
 		private Sprite currentSprite;
@@ -61,6 +62,7 @@ namespace Game
 		}
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
+        private readonly Sprite sanicBallRedi;
 		private readonly Sprite sanicDuck;
 
 		static private Sosn bruiit = new Sosn();
@@ -79,7 +81,8 @@ namespace Game
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
 			sanic = imaje.sanic;
-			sanicBall = imaje.sanicBall;
+            sanicBall = imaje.sanicBall;
+            sanicBallRedi = imaje.sanicBallRedi;
 			sanicDuck = imaje.sanicDuck;			
 			
 			sanicQuote = bruiit.sanicQuote;
@@ -96,7 +99,8 @@ namespace Game
 			Rotation = 0;
 			Speed = new Vector2f(0, 0);
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
-			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+            sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+            sanicBallRedi.Origin = new Vector2f(sanicBallRedi.GetLocalBounds().Width / 2, sanicBallRedi.GetLocalBounds().Height / 2);
 			sanicDuck.Origin = new Vector2f(sanicDuck.GetLocalBounds().Width / 2, sanicDuck.GetLocalBounds().Height / 2);
 			sheet.Origin = new Vector2f(sheet.GetLocalBounds().Width / 2, sheet.GetLocalBounds().Height / 2);
 
@@ -160,6 +164,7 @@ namespace Game
 			raise();
 			if ((Keyboard.IsKeyPressed(Keyboard.Key.D)) || (Keyboard.IsKeyPressed(Keyboard.Key.A)))
 			{
+                orientation = Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : -1;
 				spin();
 			}
 			else if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
@@ -335,7 +340,15 @@ namespace Game
 			//if (true)  //For funny wierd shit
 			{
 				spen_sped += 0.3f;
+                boostRedi = false;
 			}
+            else if(!boostRedi)
+            {
+                currentSprite = sanicBallRedi;
+                Quote(2);
+                boostRedi = true;
+            }
+
 			if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
 				boost();
