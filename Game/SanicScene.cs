@@ -46,17 +46,17 @@ namespace Game
             if (playTeme)
             {
                 Music teme;
-                if (new Random().Next(8) == 0)
+                if (new Random().Next(8) >= 0)
                 {
                     teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 
-                    teme.Volume = 5;
+                    teme.Volume = 7;
                 }
                 else
                 {
                     teme = new Music(@"..\..\Ressources\gloria.wav");
 
-                    teme.Volume = 30;
+                    teme.Volume = 100;
                 }
                 teme.Loop = true;
                 teme.Play();

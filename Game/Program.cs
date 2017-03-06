@@ -45,10 +45,10 @@ namespace Game
 			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro.wav")));
 			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
 
-			int i = rand.Next(scream.Count);
-			scream.ElementAt(i).Loop = false;
-
-			scream.ElementAt(i).Play();
+			Sound son = scream.ElementAt(rand.Next(scream.Count));
+            son.Loop = false;
+            son.Volume = 40;
+            son.Play();
 
 			splashScreen.Display();
 
