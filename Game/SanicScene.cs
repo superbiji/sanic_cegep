@@ -46,7 +46,7 @@ namespace Game
             if (playTeme)
             {
                 Music teme;
-                if (new Random().Next(8) >= 0)
+                if (new Random().Next(8) == 0)
                 {
                     teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 
