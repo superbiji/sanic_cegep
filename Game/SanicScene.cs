@@ -12,6 +12,9 @@ namespace Game
 {
 	public class SanicScene : Scene
 	{
+		private bool playTeme = true; //quand on est tannés des tounes
+
+
 		protected float ratio;
 		protected View camera;
 		protected FloatRect boundaries;
@@ -30,7 +33,7 @@ namespace Game
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale *= 3;
 			boundaries = background.GetGlobalBounds();
-	
+
 			sanic = new Sanic();
 			squidnic = new Squidnic(window);
 			camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
@@ -41,7 +44,7 @@ namespace Game
 			plateformes.Add(box);
 
 			Music teme;
-			if (new Random().Next(5) == 0)
+			if (new Random().Next(8) == 0)
 			{
 				teme = new Music(@"..\..\Ressources\SanicMusic.wav");
 				teme.Volume = 10;
@@ -124,10 +127,13 @@ namespace Game
 				}
 			}
 
-			if ((squidnic.Position.X - squidnic.Origin.X <= 0) ||
-				(squidnic.Position.X + squidnic.Origin.X >= boundaries.Width))
+			if (squidnic.Position.X - squidnic.Origin.X <= 0)
 			{
-				squidnic.turn();
+				squidnic.bounce(Orientation.DROITE);
+			}
+			else if (squidnic.Position.X + squidnic.Origin.X >= boundaries.Width)
+			{
+				squidnic.bounce(Orientation.GAUCHE);
 			}
 
 			return updateResult;

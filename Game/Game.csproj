@@ -134,6 +134,7 @@
     <Content Include="Ressources\SanicMusic.wav" />
     <Content Include="Ressources\SanicQuote.wav" />
     <Content Include="Ressources\SanicSpen.wav" />
+    <Content Include="Ressources\sanic_ball_redi.png" />
     <Content Include="Ressources\sanic_ball.png" />
     <Content Include="Ressources\sanic_jamp.wav" />
     <Content Include="Ressources\sanic_ren.wav" />
