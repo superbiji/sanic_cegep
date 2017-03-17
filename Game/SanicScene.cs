@@ -35,7 +35,7 @@ namespace Game
 			boundaries = background.GetGlobalBounds();
 
 			sanic = new Sanic(new Vector2f(0, 0));
-			squidnic = new Squidnic(window);
+			squidnic = new Squidnic(new Vector2f(0, 0));
 			camera = new View(new Vector2f(sanic.SpriteRect.Left + (sanic.SpriteRect.Width / 2), sanic.SpriteRect.Top + (sanic.SpriteRect.Height / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
 
 			RectangleShape box = new RectangleShape(new Vector2f(300, 50));
@@ -109,29 +109,29 @@ namespace Game
 
 			if (squidnic.Speed.Y >= 0)
 			{
-				if (squidnic.Position.Y + squidnic.Size.Y >= boundaries.Height)
+				if (squidnic.Position.Y + squidnic.SpriteRect.Height >= boundaries.Height)
 				{
 					squidnic.Grounded = true;
-					squidnic.Position.Y = boundaries.Height - squidnic.Size.Y;
+					squidnic.Position.Y = boundaries.Height - squidnic.SpriteRect.Height;
 				}
 				else
 				{
 					foreach (RectangleShape plateforme in plateformes)
 					{
-						if (squidnic.boundaries.Intersects(plateforme.GetGlobalBounds()))
+						if (squidnic.SpriteRect.Intersects(plateforme.GetGlobalBounds()))
 						{
 							squidnic.Grounded = true;
-							squidnic.Position.Y = plateforme.GetGlobalBounds().Top - squidnic.Size.Y + 1;
+							squidnic.Position.Y = plateforme.GetGlobalBounds().Top - squidnic.SpriteRect.Height + 1;
 						}
 					}
 				}
 			}
 
-			if (squidnic.Position.X - squidnic.Origin.X <= 0)
+			if (squidnic.CollisionRect.Left < 0)
 			{
 				squidnic.bounce(Orientation.DROITE);
 			}
-			else if (squidnic.Position.X + squidnic.Origin.X >= boundaries.Width)
+			else if (squidnic.CollisionRect.Left + squidnic.CollisionRect.Width >= boundaries.Width)
 			{
 				squidnic.bounce(Orientation.GAUCHE);
 			}
@@ -142,9 +142,9 @@ namespace Game
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
 			float x1 = Math.Min(sanic.CollisionRect.Left, squidnic.Position.X);
-			float x2 = Math.Max(sanic.CollisionRect.Left + sanic.CollisionRect.Width, squidnic.Position.X + squidnic.Size.X);
+			float x2 = Math.Max(sanic.CollisionRect.Left + sanic.CollisionRect.Width, squidnic.Position.X + squidnic.SpriteRect.Width);
 			float y1 = Math.Min(sanic.CollisionRect.Top, squidnic.Position.Y);
-			float y2 = Math.Max(sanic.CollisionRect.Top + sanic.CollisionRect.Height, squidnic.Position.Y + squidnic.Size.Y);
+			float y2 = Math.Max(sanic.CollisionRect.Top + sanic.CollisionRect.Height, squidnic.Position.Y + squidnic.SpriteRect.Height);
 			float cameraWidth = Math.Max(x2 - x1 + 300, 500);
 			float cameraHeight = Math.Max(y2 - y1 + 300, 500); ;
 			if (cameraHeight < cameraWidth / ratio)
