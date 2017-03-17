@@ -10,7 +10,7 @@ namespace Game
 	public class Game
 	{
 		protected RenderWindow window;
-		protected SanicScene sanicScene;
+		protected SanicLevel sanicScene;
 
 		public Game(UInt32 width, UInt32 height, string title, Styles style, UInt32 framerateLimit)
 		{
@@ -19,7 +19,7 @@ namespace Game
 			window.SetKeyRepeatEnabled(false);
 			window.Closed += new EventHandler(OnClose);
 
-			sanicScene = new SanicScene(window);
+			sanicScene = new SanicLevel(window);
 		}
 
 		public Game(UInt32 width, UInt32 height, string title, Styles style = Styles.Close)
