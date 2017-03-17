@@ -25,13 +25,13 @@ namespace Game
 		protected float rotation = 0;
 		protected State state = State.Standing;
 
-		public bool Grounded = false;
+		public Vector2f Speed = new Vector2f(0, 0);
+
 		private bool boostRedi = false;
 
 		private Animation sheet;
 		private Sprite currentSprite;
 		private float spen_sped = 0f;
-		public Vector2f Speed;
 
 		public FloatRect SpriteRect
 		{
@@ -76,7 +76,6 @@ namespace Game
 			ren.Loop = true;
 			spenSound.Loop = true;
 
-			Speed = new Vector2f(0, 0);
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
 			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
 			sanicBallRedi.Origin = new Vector2f(sanicBallRedi.GetLocalBounds().Width / 2, sanicBallRedi.GetLocalBounds().Height / 2);
@@ -93,22 +92,6 @@ namespace Game
 				Speed.X = orientation * (spen_sped + 20);
 			}
 			run();
-		}
-
-		public void turnLeft()
-		{
-			Speed.X = -Math.Abs(Speed.X);
-			//sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-			bump.Play();
-			orientation = -1;
-		}
-
-		public void turnRight()
-		{
-			Speed.X = Math.Abs(Speed.X);
-			//sanic_sped.X = (int)(Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-			bump.Play();
-			orientation = 1;
 		}
 
 		public void collisions()
@@ -157,6 +140,11 @@ namespace Game
 			currentSprite = sanicBall;
 			ren.Stop();
 			state = State.Jumping;
+		}
+
+		public override bool isFalling()
+		{
+			return Speed.Y >= 0;
 		}
 
 		private bool isMovingX()
@@ -349,6 +337,49 @@ namespace Game
 			}
 		}
 
+		public override void collision(Collisionable collisionable, CollisionDirection collisionDirection)
+		{
+			if (collisionDirection == CollisionDirection.NONE)
+			{
+				Grounded = false;
+			}
+			else if ((collisionable is Plateforme) && (collisionDirection == CollisionDirection.DOWN))
+			{
+				Grounded = true;
+
+				Plateforme plateforme = collisionable as Plateforme;
+				collisionRect.Top = plateforme.GetGlobalBounds().Top - collisionRect.Height + 1;
+			}
+			else if (collisionable is SanicLevel.Boundaries)
+			{
+				switch (collisionDirection)
+				{
+					case CollisionDirection.DOWN:
+						{
+							Grounded = true;
+
+							SanicLevel.Boundaries boundaries = collisionable as SanicLevel.Boundaries;
+							collisionRect.Top = boundaries.CollisionRect.Height - collisionRect.Height;
+						}
+						break;
+					case CollisionDirection.LEFT:
+						{
+							orientation = -1;
+							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+							bump.Play();
+						}
+						break;
+					case CollisionDirection.RIGHT:
+						{
+							orientation = 1;
+							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+							bump.Play();
+						}
+						break;
+				}
+			}
+		}
+
 		public override int update(int elapsedMilliseconds)
 		{
 			switch (state)
@@ -376,9 +407,10 @@ namespace Game
 			}
 
 			collisions();
+			collision(null, CollisionDirection.NONE);
 
-			CollisionRect.Left += Speed.X;
-			CollisionRect.Top += Speed.Y;
+			collisionRect.Left += Speed.X;
+			collisionRect.Top += Speed.Y;
 
 			currentSprite.Scale = new Vector2f(orientation, currentSprite.Scale.Y);  //Flip sprite
 
@@ -387,7 +419,7 @@ namespace Game
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			currentSprite.Position = new Vector2f(CollisionRect.Left, CollisionRect.Top) + currentSprite.Origin;
+			currentSprite.Position = new Vector2f(collisionRect.Left, collisionRect.Top) + currentSprite.Origin;
 			currentSprite.Rotation = rotation;
 
 			currentSprite.Draw(target, states);

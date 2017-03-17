@@ -28,6 +28,8 @@ namespace Game
 		private Sprite currentSpriteBody;
 		private Sprite currentSpriteFace;
 
+		public Vector2f Speed = new Vector2f(0, 0);
+
 		public FloatRect SpriteRect
 		{
 			get
@@ -40,19 +42,11 @@ namespace Game
 		private float Rotation = 0;
 		//  private State state = State.Standing;
 
-		public Vector2f Position = new Vector2f(200, 200);
-		private Vector2f Scale = new Vector2f(1, 1);
-		public Vector2f Speed = new Vector2f(0, 0);
 		private readonly Vector2f ACCELERATION_X = new Vector2f(0.8f, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
-		public bool Grounded
-		{
-			get;
-			set;
-		}
 
 		public Squidnic(Vector2f position)
-			: base(new FloatRect(position, new Vector2f(150, 170)))
+			: base(new FloatRect(position, new Vector2f(180, 170)))
 		{
 			currentSpriteBody = imajes.squidBody;
 			currentSpriteBody.Origin = new Vector2f(imajes.squidBody.GetLocalBounds().Width / 2, imajes.squidBody.GetLocalBounds().Height / 2);
@@ -66,35 +60,9 @@ namespace Game
 			Grounded = false;
 		}
 
-		public override void Draw(RenderTarget target, RenderStates states)
-		{
-			currentSpriteBody.Draw(target, states);
-			currentSpriteFace.Draw(target, states);
-		}
-
-		private void UpdateSprite()
-		{
-			Rotation = Position.X;
-
-			Scale.X = (float)((int)orientation*1f);			//Flip sprite
-			currentSpriteBody.Position = Position;
-			currentSpriteBody.Rotation = Rotation;
-			currentSpriteBody.Scale = Scale;
-
-			currentSpriteFace.Position = Position;
-			currentSpriteFace.Scale = Scale;
-		}
-
 		private void fall()
 		{
 			Speed += GRAVITY;
-		}
-
-		public void bounce(Orientation pOri)
-		{
-			orientation = pOri;
-			Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
-			bruiit.bump.Play();
 		}
 
 		private void collision()
@@ -133,6 +101,54 @@ namespace Game
 			bruiit.jamp.Play();
 		}
 
+		public override bool isFalling()
+		{
+			return Speed.Y >= 0;
+		}
+
+		public override void collision(Collisionable collisionable, CollisionDirection collisionDirection)
+		{
+			if (collisionDirection == CollisionDirection.NONE)
+			{
+				Grounded = false;
+			}
+			else if ((collisionable is Plateforme) && (collisionDirection == CollisionDirection.DOWN))
+			{
+				Grounded = true;
+
+				Plateforme plateforme = collisionable as Plateforme;
+				collisionRect.Top = plateforme.GetGlobalBounds().Top - collisionRect.Height + 1;
+			}
+			else if (collisionable is SanicLevel.Boundaries)
+			{
+				switch (collisionDirection)
+				{
+					case CollisionDirection.DOWN:
+						{
+							Grounded = true;
+
+							SanicLevel.Boundaries boundaries = collisionable as SanicLevel.Boundaries;
+							collisionRect.Top = boundaries.CollisionRect.Height - collisionRect.Height;
+						}
+						break;
+					case CollisionDirection.LEFT:
+						{
+							orientation = Orientation.GAUCHE;
+							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+							bruiit.bump.Play();
+						}
+						break;
+					case CollisionDirection.RIGHT:
+						{
+							orientation = Orientation.DROITE;
+							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+							bruiit.bump.Play();
+						}
+						break;
+				}
+			}
+		}
+
 		private void updateStep()
 		{
 			bruiit.squid_step.Pitch = 1f + Math.Abs(Speed.X) / 60;
@@ -162,13 +178,25 @@ namespace Game
 			}
 			updateStep();
 			collision();
+			collision(null, CollisionDirection.NONE);
 
-			Position.X += Speed.X;
-			Position.Y += Speed.Y;
-
-			UpdateSprite();
+			collisionRect.Left += Speed.X;
+			collisionRect.Top += Speed.Y;
 
 			return 0;
+		}
+
+		public override void Draw(RenderTarget target, RenderStates states)
+		{
+			currentSpriteBody.Position = new Vector2f(CollisionRect.Left, CollisionRect.Top) + currentSpriteBody.Origin;
+			currentSpriteBody.Rotation = CollisionRect.Left;
+			currentSpriteBody.Scale = new Vector2f((float)orientation, currentSpriteBody.Scale.Y); //Flip sprite
+
+			currentSpriteFace.Position = new Vector2f(CollisionRect.Left, CollisionRect.Top) + currentSpriteBody.Origin;
+			currentSpriteFace.Scale = new Vector2f((float)orientation, currentSpriteFace.Scale.Y);//Flip sprite
+
+			currentSpriteBody.Draw(target, states);
+			currentSpriteFace.Draw(target, states);
 		}
 	}
 }

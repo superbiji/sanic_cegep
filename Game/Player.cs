@@ -8,17 +8,34 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-	public abstract class Player : Updatable, Drawable
+	public abstract class Player : Collisionable, Updatable, Drawable
 	{
-		public FloatRect CollisionRect;
+		protected FloatRect collisionRect;
+		public FloatRect CollisionRect
+		{
+			get
+			{
+				return collisionRect;
+			}
+			protected set
+			{
+				collisionRect = value;
+			}
+		}
+
+		protected bool Grounded = false;
 
 		public Player(FloatRect collisionRect)
 		{
 			CollisionRect = new FloatRect(collisionRect.Left, collisionRect.Top, collisionRect.Width, collisionRect.Height);
 		}
 
-		public abstract int update(int elapsedMilliseconds);
+		public virtual void collision(Collisionable collisionable, CollisionDirection collisionDirection)
+		{
+		}
 
+		public abstract bool isFalling();
+		public abstract int update(int elapsedMilliseconds);
 		public abstract void Draw(RenderTarget target, RenderStates states);
 	}
 }
