@@ -22,9 +22,8 @@ namespace Game
 				collisionRect = value;
 			}
 		}
-
 		protected Queue<Tuple<Collisionable, CollisionDirection>> collisionables = new Queue<Tuple<Collisionable, CollisionDirection>>();
-		protected bool Grounded = false;
+		public Vector2f Speed = new Vector2f(0, 0);
 
 		public Player(FloatRect collisionRect)
 		{
@@ -36,7 +35,6 @@ namespace Game
 			collisionables.Enqueue(new Tuple<Collisionable, CollisionDirection>(collisionable, collisionDirection));
 		}
 
-		public abstract bool isFalling();
 		public abstract int update(int elapsedMilliseconds);
 		public abstract void Draw(RenderTarget target, RenderStates states);
 	}

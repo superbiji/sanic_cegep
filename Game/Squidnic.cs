@@ -40,6 +40,7 @@ namespace Game
 
 		private Orientation orientation = Orientation.GAUCHE;
 		private float Rotation = 0;
+		protected bool Grounded = false;
 		//  private State state = State.Standing;
 
 		private readonly Vector2f ACCELERATION_X = new Vector2f(0.8f, 0);
@@ -99,11 +100,6 @@ namespace Game
 		{
 			Speed.Y = -30;
 			bruiit.jamp.Play();
-		}
-
-		public override bool isFalling()
-		{
-			return Speed.Y >= 0;
 		}
 
 		public override void collision(Collisionable collisionable, CollisionDirection collisionDirection)

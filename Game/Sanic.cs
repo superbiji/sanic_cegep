@@ -31,9 +31,8 @@ namespace Game
 			return state;
 		}
 
-		public Vector2f Speed = new Vector2f(0, 0);
-
 		private bool boostRedi = false;
+		protected bool Grounded = false;
 
 		private Animation sheet;
 		private Sprite currentSprite;
@@ -134,11 +133,6 @@ namespace Game
 			currentSprite = sanicBall;
 			ren.Stop();
 			state = State.Jumping;
-		}
-
-		public override bool isFalling()
-		{
-			return Speed.Y >= 0;
 		}
 
 		private bool isMovingX()
@@ -366,7 +360,7 @@ namespace Game
 								collisionRect.Left = boundaries.Left + boundaries.Width - collisionRect.Width;
 								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
 
-								if (Math.Abs(Speed.X) > 3)
+								if (Math.Abs(Speed.X) > 4)
 								{
 									bump.Play();
 								}
@@ -383,7 +377,7 @@ namespace Game
 								collisionRect.Left = boundaries.Left;
 								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
 
-								if (Math.Abs(Speed.X) > 3)
+								if (Math.Abs(Speed.X) > 4)
 								{
 									bump.Play();
 								}

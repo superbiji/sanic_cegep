@@ -105,7 +105,7 @@ namespace Game
 
 			foreach (Player player in players)
 			{
-				if (player.isFalling())
+				if (player.Speed.Y >= 0)
 				{
 					if (player.CollisionRect.Top + player.CollisionRect.Height >= boundaries.CollisionRect.Height)
 					{
