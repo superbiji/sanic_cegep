@@ -59,12 +59,12 @@ namespace Game
 			boundaries = new Boundaries(background.GetGlobalBounds());
 
 			Sanic sanic = new Sanic(new Vector2f(0, 0));
-			Squidnic squidnic = new Squidnic(new Vector2f(0, 0));
+			Squidnic squidnic = new Squidnic(new Vector2f(boundaries.CollisionRect.Left + boundaries.CollisionRect.Width - 200, 0));
 			camera = new View(new Vector2f(sanic.SpriteRect.Left + (sanic.SpriteRect.Width / 2), sanic.SpriteRect.Top + (sanic.SpriteRect.Height / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
 
 			Plateforme box = new Plateforme(new Vector2f(300, 50));
-			box.Position = new Vector2f(0, 800);
-			box.FillColor = Color.Red;
+			box.Position = new Vector2f(boundaries.CollisionRect.Left + boundaries.CollisionRect.Width - box.CollisionRect.Width, 800);
+			box.FillColor = Color.Magenta;
 			plateformes.Add(box);
 
 			Music teme;
@@ -119,7 +119,7 @@ namespace Game
 					}
 				}
 
-				if (player.CollisionRect.Left < 0)
+				if (player.CollisionRect.Left < boundaries.CollisionRect.Left)
 				{
 					player.collision(boundaries, CollisionDirection.RIGHT);
 				}

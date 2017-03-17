@@ -57,7 +57,7 @@ namespace Game
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
 		public Sanic(Vector2f position)
-			: base(new FloatRect(position, new Vector2f(150, 170)))
+			: base(new FloatRect(position, new Vector2f(100, 100)))
 		{
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
@@ -92,18 +92,6 @@ namespace Game
 				Speed.X = orientation * (spen_sped + 20);
 			}
 			run();
-		}
-
-		public void collisions()
-		{
-			if (!Grounded)
-			{
-				fall();
-			}
-			else
-			{
-				Speed.Y = Speed.Y < 0 ? Speed.Y : 0;
-			}
 		}
 
 		private void duck()
@@ -337,46 +325,64 @@ namespace Game
 			}
 		}
 
-		public override void collision(Collisionable collisionable, CollisionDirection collisionDirection)
+		public void collisions()
 		{
-			if (collisionDirection == CollisionDirection.NONE)
+			Grounded = false;
+			while (collisionables.Count > 0)
 			{
-				Grounded = false;
-			}
-			else if ((collisionable is Plateforme) && (collisionDirection == CollisionDirection.DOWN))
-			{
-				Grounded = true;
+				Tuple<Collisionable, CollisionDirection> tuple = collisionables.Dequeue();
+				Collisionable collisionable = tuple.Item1;
+				CollisionDirection collisionDirection = tuple.Item2;
 
-				Plateforme plateforme = collisionable as Plateforme;
-				collisionRect.Top = plateforme.GetGlobalBounds().Top - collisionRect.Height + 1;
-			}
-			else if (collisionable is SanicLevel.Boundaries)
-			{
-				switch (collisionDirection)
+				if ((collisionable is Plateforme) && (collisionDirection == CollisionDirection.DOWN))
 				{
-					case CollisionDirection.DOWN:
-						{
-							Grounded = true;
+					Grounded = true;
 
-							SanicLevel.Boundaries boundaries = collisionable as SanicLevel.Boundaries;
-							collisionRect.Top = boundaries.CollisionRect.Height - collisionRect.Height;
-						}
-						break;
-					case CollisionDirection.LEFT:
-						{
-							orientation = -1;
-							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
-							bump.Play();
-						}
-						break;
-					case CollisionDirection.RIGHT:
-						{
-							orientation = 1;
-							Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
-							bump.Play();
-						}
-						break;
+					Plateforme plateforme = collisionable as Plateforme;
+					collisionRect.Top = plateforme.GetGlobalBounds().Top - collisionRect.Height + 1;
 				}
+				else if (collisionable is SanicLevel.Boundaries)
+				{
+					FloatRect boundaries = (collisionable as SanicLevel.Boundaries).CollisionRect;
+
+					switch (collisionDirection)
+					{
+						case CollisionDirection.DOWN:
+							{
+								Grounded = true;
+
+								collisionRect.Top = boundaries.Height - collisionRect.Height + 1;
+							}
+							break;
+						case CollisionDirection.LEFT:
+							{
+								orientation = -1;
+								collisionRect.Left = boundaries.Left + boundaries.Width - collisionRect.Width - 1;
+								Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+
+								bump.Play();
+							}
+							break;
+						case CollisionDirection.RIGHT:
+							{
+								orientation = 1;
+								collisionRect.Left = boundaries.Left;
+								Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+
+								bump.Play();
+							}
+							break;
+					}
+				}
+			}
+
+			if (!Grounded)
+			{
+				fall();
+			}
+			else
+			{
+				Speed.Y = Speed.Y < 0 ? Speed.Y : 0;
 			}
 		}
 
@@ -407,7 +413,6 @@ namespace Game
 			}
 
 			collisions();
-			collision(null, CollisionDirection.NONE);
 
 			collisionRect.Left += Speed.X;
 			collisionRect.Top += Speed.Y;
@@ -419,7 +424,8 @@ namespace Game
 
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
-			currentSprite.Position = new Vector2f(collisionRect.Left, collisionRect.Top) + currentSprite.Origin;
+			//Sprite centré. Va falloir trouver une autre facon générique de gérer les hotspots
+			currentSprite.Position = new Vector2f(collisionRect.Left - (collisionRect.Width / 2), collisionRect.Top - (collisionRect.Height / 2)) + currentSprite.Origin;
 			currentSprite.Rotation = rotation;
 
 			currentSprite.Draw(target, states);

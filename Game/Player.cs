@@ -23,6 +23,7 @@ namespace Game
 			}
 		}
 
+		protected Queue<Tuple<Collisionable, CollisionDirection>> collisionables = new Queue<Tuple<Collisionable, CollisionDirection>>();
 		protected bool Grounded = false;
 
 		public Player(FloatRect collisionRect)
@@ -32,6 +33,7 @@ namespace Game
 
 		public virtual void collision(Collisionable collisionable, CollisionDirection collisionDirection)
 		{
+			collisionables.Enqueue(new Tuple<Collisionable, CollisionDirection>(collisionable, collisionDirection));
 		}
 
 		public abstract bool isFalling();
