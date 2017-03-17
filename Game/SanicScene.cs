@@ -115,7 +115,7 @@ namespace Game
 					{
 						foreach (Plateforme plateforme in plateformes)
 						{
-							if (player.CollisionRect.Intersects(plateforme.GetGlobalBounds()))
+							if (player.CollisionRect.Intersects(plateforme.GetGlobalBounds())) //à chier
 							{
 								player.collision(plateforme, CollisionDirection.DOWN);
 							}
