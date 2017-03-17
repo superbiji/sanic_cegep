@@ -39,6 +39,7 @@ namespace Game
 
 		private bool playTeme = true; //quand on est tannés des tounes
 
+		Text debug = new Text("debug", new Font(@"..\..\Ressources\DigitalDream.ttf"));
 
 		protected float ratio;
 		protected View camera;
@@ -53,6 +54,9 @@ namespace Game
 			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
 
 			ratio = (float)window.Size.X / (float)window.Size.Y;
+
+			debug.Color = Color.Red;
+			debug.Style = Text.Styles.Bold;
 
 			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
 			background.Scale *= 3;
@@ -121,11 +125,11 @@ namespace Game
 
 				if (player.CollisionRect.Left < boundaries.CollisionRect.Left)
 				{
-					player.collision(boundaries, CollisionDirection.RIGHT);
+					player.collision(boundaries, CollisionDirection.LEFT);
 				}
 				else if (player.CollisionRect.Left + player.CollisionRect.Width > boundaries.CollisionRect.Width)
 				{
-					player.collision(boundaries, CollisionDirection.LEFT);
+					player.collision(boundaries, CollisionDirection.RIGHT);
 				}
 			}
 
@@ -156,6 +160,14 @@ namespace Game
 			target.SetView(camera);
 
 			base.Draw(target, states);
+
+			/*Sanic sanic = players.First() as Sanic;
+			debug.DisplayedString = "state : " + sanic.getState().ToString() + "\n";
+			debug.DisplayedString += "speed x : " + sanic.Speed.X + "\n";
+			debug.DisplayedString += "x : " + sanic.CollisionRect.Left + "\n";
+			debug.DisplayedString += "y : " + sanic.CollisionRect.Top + "\n";
+			debug.Position = new Vector2f(camera.Center.X - camera.Size.X / 2, camera.Center.Y - camera.Size.Y / 2);
+			debug.Draw(target, states);*/
 		}
 
 		protected void OnKeyPressed(object sender, EventArgs e)

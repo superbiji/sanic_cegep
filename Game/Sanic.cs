@@ -12,7 +12,7 @@ namespace Game
 {
 	public class Sanic : Player
 	{
-		protected enum State
+		public enum State
 		{
 			Standing,
 			Running,
@@ -24,6 +24,12 @@ namespace Game
 		protected int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
 		protected float rotation = 0;
 		protected State state = State.Standing;
+
+		//DEBUG
+		public State getState()
+		{
+			return state;
+		}
 
 		public Vector2f Speed = new Vector2f(0, 0);
 
@@ -57,7 +63,7 @@ namespace Game
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
 		public Sanic(Vector2f position)
-			: base(new FloatRect(position, new Vector2f(100, 100)))
+			: base(new FloatRect(position, new Vector2f(100, 170)))
 		{
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
@@ -351,25 +357,41 @@ namespace Game
 							{
 								Grounded = true;
 
-								collisionRect.Top = boundaries.Height - collisionRect.Height + 1;
-							}
-							break;
-						case CollisionDirection.LEFT:
-							{
-								orientation = -1;
-								collisionRect.Left = boundaries.Left + boundaries.Width - collisionRect.Width - 1;
-								Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
-
-								bump.Play();
+								collisionRect.Top = boundaries.Top + boundaries.Height - collisionRect.Height;
 							}
 							break;
 						case CollisionDirection.RIGHT:
 							{
+								orientation = -1;
+								collisionRect.Left = boundaries.Left + boundaries.Width - collisionRect.Width;
+								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
+
+								if (Math.Abs(Speed.X) > 3)
+								{
+									bump.Play();
+								}
+								else
+								{
+									orientation = 1;
+									Speed.X = 0;
+								}
+							}
+							break;
+						case CollisionDirection.LEFT:
+							{
 								orientation = 1;
 								collisionRect.Left = boundaries.Left;
-								Speed.X = (((int)orientation) * Math.Max(Math.Abs(Speed.X), 1f)) * 0.9f;
+								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
 
-								bump.Play();
+								if (Math.Abs(Speed.X) > 3)
+								{
+									bump.Play();
+								}
+								else
+								{
+									orientation = -1;
+									Speed.X = 0;
+								}
 							}
 							break;
 					}
@@ -412,12 +434,9 @@ namespace Game
 				Quote();
 			}
 
-			collisions();
-
 			collisionRect.Left += Speed.X;
 			collisionRect.Top += Speed.Y;
-
-			currentSprite.Scale = new Vector2f(orientation, currentSprite.Scale.Y);  //Flip sprite
+			collisions();
 
 			return 0;
 		}
@@ -425,10 +444,16 @@ namespace Game
 		public override void Draw(RenderTarget target, RenderStates states)
 		{
 			//Sprite centré. Va falloir trouver une autre facon générique de gérer les hotspots
-			currentSprite.Position = new Vector2f(collisionRect.Left - (collisionRect.Width / 2), collisionRect.Top - (collisionRect.Height / 2)) + currentSprite.Origin;
+			currentSprite.Position = new Vector2f(collisionRect.Left - (collisionRect.Width / 2), collisionRect.Top) + currentSprite.Origin;
 			currentSprite.Rotation = rotation;
+			currentSprite.Scale = new Vector2f(orientation, currentSprite.Scale.Y);  //Flip sprite
 
 			currentSprite.Draw(target, states);
+
+			/*RectangleShape collisionShape = new RectangleShape(new Vector2f(CollisionRect.Width, CollisionRect.Height));
+			collisionShape.Position = new Vector2f(CollisionRect.Left, CollisionRect.Top);
+			collisionShape.FillColor = Color.Yellow;
+			collisionShape.Draw(target, states);*/
 		}
 	}
 }

@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Ressources\DigitalDream.ttf" />
     <None Include="Ressources\squidnic.pdn" />
   </ItemGroup>
   <ItemGroup>
