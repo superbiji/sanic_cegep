@@ -20,7 +20,7 @@ namespace Game
 			double ratioVoulu = 16.0 / 9.0;
 			UInt32 largeurFen = (UInt32)(hautFen * ratioVoulu);
 
-			intro();
+			//intro();
 
 			Game game = new Game(largeurFen, hautFen, "test", Styles.Close);
 
@@ -46,9 +46,9 @@ namespace Game
 			scream.Add(new Sound(new SoundBuffer(@"..\..\Ressources\Intro2.wav")));
 
 			Sound son = scream.ElementAt(rand.Next(scream.Count));
-            son.Loop = false;
-            son.Volume = 40;
-            son.Play();
+			son.Loop = false;
+			son.Volume = 40;
+			son.Play();
 
 			splashScreen.Display();
 

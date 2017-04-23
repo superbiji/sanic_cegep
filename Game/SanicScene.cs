@@ -10,173 +10,173 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public class SanicScene : Scene
-    {
-        private bool playTeme = true; //quand on est tannés des tounes
+	public class SanicLevel : Scene
+	{
+		public class Boundaries : Collisionable
+		{
+			protected FloatRect collisionRect;
+			public FloatRect CollisionRect
+			{
+				get
+				{
+					return collisionRect;
+				}
+				protected set
+				{
+					collisionRect = value;
+				}
+			}
 
+			public Boundaries(FloatRect floatRect)
+			{
+				CollisionRect = floatRect;
+			}
 
-        protected float ratio;
-        protected View camera;
-        protected FloatRect boundaries;
-        protected Sprite background;
-        protected Sanic sanic;
-        protected Squidnic squidnic;
-        protected List<RectangleShape> plateformes = new List<RectangleShape>();
+			public void collision(Collisionable collisionable, CollisionDirection collisionDirection)
+			{
+			}
+		}
 
-        public SanicScene(RenderWindow window)
-            : base(window)
-        {
-            window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
+		private bool playTeme = true; //quand on est tannés des tounes
 
-            ratio = (float)window.Size.X / (float)window.Size.Y;
+		Text debug = new Text("debug", new Font(@"..\..\Ressources\DigitalDream.ttf"));
 
-            background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
-            background.Scale *= 3;
-            boundaries = background.GetGlobalBounds();
+		protected float ratio;
+		protected View camera;
+		protected Boundaries boundaries;
+		protected Sprite background;
+		protected List<Player> players = new List<Player>();
+		protected List<Plateforme> plateformes = new List<Plateforme>();
 
-            sanic = new Sanic();
-            squidnic = new Squidnic(window);
-            camera = new View(new Vector2f(sanic.Position.X + (sanic.Size.X / 2), sanic.Position.Y + (sanic.Size.Y / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
+		public SanicLevel(RenderWindow window)
+			: base(window)
+		{
+			window.KeyPressed += new EventHandler<KeyEventArgs>(OnKeyPressed);
 
-            RectangleShape box = new RectangleShape(new Vector2f(300, 50));
-            box.Position = new Vector2f(0, 800);
-            box.FillColor = Color.Red;
-            plateformes.Add(box);
+			ratio = (float)window.Size.X / (float)window.Size.Y;
 
-            if (playTeme)
-            {
-                Music teme;
-                if (new Random().Next(8) == 0)
-                {
-                    teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+			debug.Color = Color.Red;
+			debug.Style = Text.Styles.Bold;
 
-                    teme.Volume = 7;
-                }
-                else
-                {
-                    teme = new Music(@"..\..\Ressources\gloria.wav");
+			background = new Sprite(new Texture(@"..\..\Ressources\Background.jpg"));
+			background.Scale *= 3;
+			boundaries = new Boundaries(background.GetGlobalBounds());
 
-                    teme.Volume = 100;
-                }
-                teme.Loop = true;
-                teme.Play();
-            }
+			Sanic sanic = new Sanic(new Vector2f(0, 0));
+			Squidnic squidnic = new Squidnic(new Vector2f(boundaries.CollisionRect.Left + boundaries.CollisionRect.Width - 200, 0));
+			camera = new View(new Vector2f(sanic.SpriteRect.Left + (sanic.SpriteRect.Width / 2), sanic.SpriteRect.Top + (sanic.SpriteRect.Height / 2)), new Vector2f(window.Size.X, window.Size.Y) * 1.5f);
 
-            updatables.Add(sanic);
-            updatables.Add(squidnic);
-            drawables.Add(FOREGROUND, sanic);
-            drawables.Add(FOREGROUND, squidnic);
-            drawables.Add(BACKGROUND, background);
-            foreach (RectangleShape plateforme in plateformes)
-            {
-                drawables.Add(MIDDLEGROUND, plateforme);
-            }
-        }
+			Plateforme box = new Plateforme(new Vector2f(300, 50));
+			box.Position = new Vector2f(boundaries.CollisionRect.Left + boundaries.CollisionRect.Width - box.CollisionRect.Width, 800);
+			box.FillColor = Color.Magenta;
+			plateformes.Add(box);
 
-        public override int update(int elapsedMilliseconds)
-        {
-            int updateResult = base.update(elapsedMilliseconds);
+			Music teme;
+			if (new Random().Next(8) == 0)
+			{
+				teme = new Music(@"..\..\Ressources\SanicMusic.wav");
+				teme.Volume = 10;
+			}
+			else
+			{
+				teme = new Music(@"..\..\Ressources\gloria.wav");
+				teme.Volume = 30;
+			}			
+			teme.Loop = true;
 
-            sanic.Grounded = false;
+			teme.Play();
 
-            if (sanic.Speed.Y >= 0)
-            {
-                if (sanic.Position.Y + sanic.Size.Y >= boundaries.Height)
-                {
-                    sanic.Grounded = true;
-                    sanic.Position.Y = boundaries.Height - sanic.Size.Y;
-                }
-                else
-                {
-                    foreach (RectangleShape plateforme in plateformes)
-                    {
-                        if (sanic.boundaries.Intersects(plateforme.GetGlobalBounds()))
-                        {
-                            sanic.Grounded = true;
-                            sanic.Position.Y = plateforme.GetGlobalBounds().Top - sanic.Size.Y + 1;
-                        }
-                    }
-                }
-            }
+			players.Add(sanic);
+			players.Add(squidnic);
+			updatables.Add(sanic);
+			updatables.Add(squidnic);
+			drawables.Add(FOREGROUND, sanic);
+			drawables.Add(FOREGROUND, squidnic);
+			drawables.Add(BACKGROUND, background);
+			foreach (Plateforme plateforme in plateformes)
+			{
+				drawables.Add(MIDDLEGROUND, plateforme);
+			}
+		}
 
-            if (sanic.Position.X < 0)
-            {
-                sanic.turnRight();
-            }
-            else if (sanic.Position.X + sanic.Size.X > boundaries.Width)
-            {
-                sanic.turnLeft();
-            }
+		public override int update(int elapsedMilliseconds)
+		{
+			int updateResult = base.update(elapsedMilliseconds);
 
-            //DOUBLE THE TROUBLE
-            squidnic.Grounded = false;
+			foreach (Player player in players)
+			{
+				if (player.Speed.Y >= 0)
+				{
+					if (player.CollisionRect.Top + player.CollisionRect.Height >= boundaries.CollisionRect.Height)
+					{
+						player.collision(boundaries, CollisionDirection.DOWN);
+					}
+					else
+					{
+						foreach (Plateforme plateforme in plateformes)
+						{
+							if (player.CollisionRect.Intersects(plateforme.GetGlobalBounds())) //à chier
+							{
+								player.collision(plateforme, CollisionDirection.DOWN);
+							}
+						}
+					}
+				}
 
-            if (squidnic.Speed.Y >= 0)
-            {
-                if (squidnic.Position.Y + squidnic.Size.Y >= boundaries.Height)
-                {
-                    squidnic.Grounded = true;
-                    squidnic.Position.Y = boundaries.Height - squidnic.Size.Y;
-                }
-                else
-                {
-                    foreach (RectangleShape plateforme in plateformes)
-                    {
-                        if (squidnic.boundaries.Intersects(plateforme.GetGlobalBounds()))
-                        {
-                            squidnic.Grounded = true;
-                            squidnic.Position.Y = plateforme.GetGlobalBounds().Top - squidnic.Size.Y + 1;
-                        }
-                    }
-                }
-            }
+				if (player.CollisionRect.Left < boundaries.CollisionRect.Left)
+				{
+					player.collision(boundaries, CollisionDirection.LEFT);
+				}
+				else if (player.CollisionRect.Left + player.CollisionRect.Width > boundaries.CollisionRect.Width)
+				{
+					player.collision(boundaries, CollisionDirection.RIGHT);
+				}
+			}
 
-            if (squidnic.Position.X - squidnic.Origin.X <= 0)
-            {
-                squidnic.bounce(Orientation.DROITE);
-            }
-            else if (squidnic.Position.X + squidnic.Origin.X >= boundaries.Width)
-            {
-                squidnic.bounce(Orientation.GAUCHE);
-            }
+			return updateResult;
+		}
 
-            return updateResult;
-        }
+		public override void Draw(RenderTarget target, RenderStates states)
+		{
+			/*float x1 = Math.Min(sanic.CollisionRect.Left, squidnic.CollisionRect.Left);
+			float x2 = Math.Max(sanic.CollisionRect.Left + sanic.CollisionRect.Width, squidnic.CollisionRect.Left + squidnic.SpriteRect.Width);
+			float y1 = Math.Min(sanic.CollisionRect.Top, squidnic.CollisionRect.Top);
+			float y2 = Math.Max(sanic.CollisionRect.Top + sanic.CollisionRect.Height, squidnic.CollisionRect.Top + squidnic.SpriteRect.Height);
+			float cameraWidth = Math.Max(x2 - x1 + 300, 500);
+			float cameraHeight = Math.Max(y2 - y1 + 300, 500); ;
+			if (cameraHeight < cameraWidth / ratio)
+			{
+				cameraHeight = cameraWidth / ratio;
+			}
+			else
+			{
+				cameraWidth = cameraHeight * ratio;
+			}
 
-        public override void Draw(RenderTarget target, RenderStates states)
-        {
-            float x1 = Math.Min(sanic.Position.X, squidnic.Position.X);
-            float x2 = Math.Max(sanic.Position.X + sanic.Size.X, squidnic.Position.X + squidnic.Size.X);
-            float y1 = Math.Min(sanic.Position.Y, squidnic.Position.Y);
-            float y2 = Math.Max(sanic.Position.Y + sanic.Size.Y, squidnic.Position.Y + squidnic.Size.Y);
-            float cameraWidth = Math.Max(x2 - x1 + 300, 500);
-            float cameraHeight = Math.Max(y2 - y1 + 300, 500); ;
-            if (cameraHeight < cameraWidth / ratio)
-            {
-                cameraHeight = cameraWidth / ratio;
-            }
-            else
-            {
-                cameraWidth = cameraHeight * ratio;
-            }
+			camera.Size = new Vector2f(cameraWidth, cameraHeight);*/
+			FloatRect playerRect = players.First().CollisionRect;
+			camera.Center = new Vector2f(playerRect.Left + (playerRect.Width / 2), playerRect.Top + (playerRect.Height / 2));
+			//camera.Rotation = sanic.Rotation; //LOLOLOLOL
+			target.SetView(camera);
 
-            camera.Size = new Vector2f(cameraWidth, cameraHeight);
-            camera.Center = new Vector2f(((x2 - x1) / 2) + x1, ((y2 - y1) / 2) + y1);
-            //camera.Rotation = sanic.Rotation; //LOLOLOLOL
-            target.SetView(camera);
+			base.Draw(target, states);
 
-            background.Draw(target, states);
+			/*Sanic sanic = players.First() as Sanic;
+			debug.DisplayedString = "state : " + sanic.getState().ToString() + "\n";
+			debug.DisplayedString += "speed x : " + sanic.Speed.X + "\n";
+			debug.DisplayedString += "x : " + sanic.CollisionRect.Left + "\n";
+			debug.DisplayedString += "y : " + sanic.CollisionRect.Top + "\n";
+			debug.Position = new Vector2f(camera.Center.X - camera.Size.X / 2, camera.Center.Y - camera.Size.Y / 2);
+			debug.Draw(target, states);*/
+		}
 
-            base.Draw(target, states);
-        }
-
-        protected void OnKeyPressed(object sender, EventArgs e)
-        {
-            KeyEventArgs keyEventArgs = (KeyEventArgs)e;
-            if (keyEventArgs.Code == Keyboard.Key.Escape)
-            {
-                exit();
-            }
-        }
-    }
+		protected void OnKeyPressed(object sender, EventArgs e)
+		{
+			KeyEventArgs keyEventArgs = (KeyEventArgs)e;
+			if (keyEventArgs.Code == Keyboard.Key.Escape)
+			{
+				exit();
+			}
+		}
+	}
 }

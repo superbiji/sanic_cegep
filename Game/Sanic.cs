@@ -1,17 +1,18 @@
-﻿using SFML.Audio;
-using SFML.Graphics;
-using SFML.System;
-using SFML.Window;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using SFML.Graphics;
+using SFML.Window;
+using SFML.Audio;
+using SFML.System;
 
 namespace Game
 {
-	public class Sanic : Updatable, Drawable
+	public class Sanic : Player
 	{
-		private enum State
+		public enum State
 		{
 			Standing,
 			Running,
@@ -20,40 +21,24 @@ namespace Game
 			Spinning,
 		}
 
-		public Vector2f Position = new Vector2f(0, 0);
-		private Vector2f Scale = new Vector2f(1, 1);
-		private int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
-		public float Rotation
+		protected int orientation = 1; // 1: orienté à droite, -1: orienté à gauche
+		protected float rotation = 0;
+		protected State state = State.Standing;
+
+		//DEBUG
+		public State getState()
 		{
-			get;
-			private set;
+			return state;
 		}
-		private State state = State.Standing;
-		
-		public Vector2f Size
-		{
-			get
-			{
-				return new Vector2f(currentSprite.GetLocalBounds().Width, currentSprite.GetLocalBounds().Height);
-			}
-			set
-			{
-				currentSprite.Scale = new Vector2f(value.X / currentSprite.GetLocalBounds().Width, value.Y / currentSprite.GetLocalBounds().Height);
-			}
-		}
-		public bool Grounded
-		{
-			get;
-			set;
-		}
-        private bool boostRedi = false;
+
+		private bool boostRedi = false;
+		protected bool Grounded = false;
 
 		private Animation sheet;
 		private Sprite currentSprite;
 		private float spen_sped = 0f;
-		public Vector2f Speed;
 
-		public FloatRect boundaries
+		public FloatRect SpriteRect
 		{
 			get
 			{
@@ -62,7 +47,7 @@ namespace Game
 		}
 		private readonly Sprite sanic;
 		private readonly Sprite sanicBall;
-        private readonly Sprite sanicBallRedi;
+		private readonly Sprite sanicBallRedi;
 		private readonly Sprite sanicDuck;
 
 		static private Sosn bruiit = new Sosn();
@@ -76,15 +61,16 @@ namespace Game
 		private readonly Vector2f ACCELERATION_X = new Vector2f(0.5f, 0);
 		private readonly Vector2f GRAVITY = new Vector2f(0, 1);
 
-		public Sanic()
+		public Sanic(Vector2f position)
+			: base(new FloatRect(position, new Vector2f(100, 170)))
 		{
 			sheet = new Animation(imaje.sheet, new IntRect(0, 0, 162, 170));
 
 			sanic = imaje.sanic;
-            sanicBall = imaje.sanicBall;
-            sanicBallRedi = imaje.sanicBallRedi;
-			sanicDuck = imaje.sanicDuck;			
-			
+			sanicBall = imaje.sanicBall;
+			sanicBallRedi = imaje.sanicBallRedi;
+			sanicDuck = imaje.sanicDuck;
+
 			sanicQuote = bruiit.sanicQuote;
 			jamp = bruiit.jamp;
 			ren = bruiit.ren;
@@ -95,12 +81,9 @@ namespace Game
 			ren.Loop = true;
 			spenSound.Loop = true;
 
-			Grounded = false;
-			Rotation = 0;
-			Speed = new Vector2f(0, 0);
 			sanic.Origin = new Vector2f(sanic.GetLocalBounds().Width / 2, sanic.GetLocalBounds().Height / 2);
-            sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
-            sanicBallRedi.Origin = new Vector2f(sanicBallRedi.GetLocalBounds().Width / 2, sanicBallRedi.GetLocalBounds().Height / 2);
+			sanicBall.Origin = new Vector2f(sanicBall.GetLocalBounds().Width / 2, sanicBall.GetLocalBounds().Height / 2);
+			sanicBallRedi.Origin = new Vector2f(sanicBallRedi.GetLocalBounds().Width / 2, sanicBallRedi.GetLocalBounds().Height / 2);
 			sanicDuck.Origin = new Vector2f(sanicDuck.GetLocalBounds().Width / 2, sanicDuck.GetLocalBounds().Height / 2);
 			sheet.Origin = new Vector2f(sheet.GetLocalBounds().Width / 2, sheet.GetLocalBounds().Height / 2);
 
@@ -111,44 +94,11 @@ namespace Game
 		{
 			if (spen_sped > 60)
 			{
-				Speed.X = Face() * (spen_sped + 20);
+				Speed.X = orientation * (spen_sped + 20);
 			}
 			run();
 		}
 
-		public void turnLeft()
-		{
-			Speed.X = -Math.Abs(Speed.X);
-			//sanic_sped.X = (int)(-Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-			bump.Play();
-			orientation = -1;
-		}
-
-		public void turnRight()
-		{
-			Speed.X = Math.Abs(Speed.X);
-			//sanic_sped.X = (int)(Math.Abs(sanic_sped.X) * 0.9); //corrige le bug d'accélération après une collision en forçant un ralentissement... mais c'est moins drôle
-			bump.Play();
-			orientation = 1;
-		}
-
-		public void collisions()
-		{
-			if (!Grounded)
-			{
-				fall();
-			}
-			else
-			{
-				Speed.Y = Speed.Y < 0 ? Speed.Y : 0;
-			}
-		}
-
-		public void Draw(RenderTarget target, RenderStates states)
-		{
-			currentSprite.Draw(target, states);
-		}
-	
 		private void duck()
 		{
 			currentSprite = sanicDuck;
@@ -164,7 +114,7 @@ namespace Game
 			raise();
 			if ((Keyboard.IsKeyPressed(Keyboard.Key.D)) || (Keyboard.IsKeyPressed(Keyboard.Key.A)))
 			{
-                orientation = Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : -1;
+				orientation = Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : -1;
 				spin();
 			}
 			else if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
@@ -176,11 +126,6 @@ namespace Game
 		public int duckWidth()
 		{
 			return (int)(sanicDuck.Texture.Size.X);
-		}
-
-		private int Face()
-		{
-			return Scale.X < 0 ? -1 : 1;
 		}
 
 		protected void fall()
@@ -207,9 +152,9 @@ namespace Game
 		private void jumping()
 		{
 			Speed += GRAVITY;
-			Rotation += 2.5f * Speed.X / ACCELERATION_X.X;
+			rotation += 2.5f * Speed.X / ACCELERATION_X.X;
 
-			if (Keyboard.IsKeyPressed(Keyboard.Key.D)) 
+			if (Keyboard.IsKeyPressed(Keyboard.Key.D))
 			{
 				Speed += ACCELERATION_X;
 			}
@@ -241,7 +186,7 @@ namespace Game
 			bool playing = false;
 			foreach (Sound sound in sanicQuote)
 			{
-				if(sound.Status == SoundStatus.Playing)
+				if (sound.Status == SoundStatus.Playing)
 				{
 					playing = true;
 					break;
@@ -261,11 +206,11 @@ namespace Game
 
 		private void raise()
 		{
-			if (Math.Abs(Rotation) > 180)
+			if (Math.Abs(rotation) > 180)
 			{
-				Rotation -= Math.Sign(Rotation) * 360;
+				rotation -= Math.Sign(rotation) * 360;
 			}
-			Rotation /= 1.1f;
+			rotation /= 1.1f;
 		}
 
 		private void run()
@@ -290,7 +235,7 @@ namespace Game
 			{
 				duck();
 			}
-			else if (Keyboard.IsKeyPressed(Keyboard.Key.D)) 
+			else if (Keyboard.IsKeyPressed(Keyboard.Key.D))
 			{
 				Speed += ACCELERATION_X;
 			}
@@ -333,21 +278,21 @@ namespace Game
 			{
 				orientation = -1;
 			}
-			Rotation += orientation * (15 + spen_sped);
+			rotation += orientation * (15 + spen_sped);
 			spenSound.Pitch = 1 + (spen_sped / 30);
 
-			if (spen_sped < 60)
-			//if (true)  //For funny wierd shit
+			if (spen_sped < 60)/*
+			if (true)  //*///For funny wierd shit
 			{
 				spen_sped += 0.3f;
-                boostRedi = false;
+				boostRedi = false;
 			}
-            else if(!boostRedi)
-            {
-                currentSprite = sanicBallRedi;
-                Quote(2);
-                boostRedi = true;
-            }
+			else if (!boostRedi)
+			{
+				currentSprite = sanicBallRedi;
+				Quote(2);
+				boostRedi = true;
+			}
 
 			if (!Keyboard.IsKeyPressed(Keyboard.Key.S))
 			{
@@ -379,18 +324,85 @@ namespace Game
 				run();
 			}
 		}
-		
 
-		private void UpdateSprite()
+		public void collisions()
 		{
-			Scale.X = orientation;			//Flip sprite
-			currentSprite.Scale = Scale;
+			Grounded = false;
+			while (collisionables.Count > 0)
+			{
+				Tuple<Collisionable, CollisionDirection> tuple = collisionables.Dequeue();
+				Collisionable collisionable = tuple.Item1;
+				CollisionDirection collisionDirection = tuple.Item2;
 
-			currentSprite.Position = Position + currentSprite.Origin;
-			currentSprite.Rotation = Rotation;
+				if ((collisionable is Plateforme) && (collisionDirection == CollisionDirection.DOWN))
+				{
+					Grounded = true;
+
+					Plateforme plateforme = collisionable as Plateforme;
+					collisionRect.Top = plateforme.GetGlobalBounds().Top - collisionRect.Height + 1;
+				}
+				else if (collisionable is SanicLevel.Boundaries)
+				{
+					FloatRect boundaries = (collisionable as SanicLevel.Boundaries).CollisionRect;
+
+					switch (collisionDirection)
+					{
+						case CollisionDirection.DOWN:
+							{
+								Grounded = true;
+
+								collisionRect.Top = boundaries.Top + boundaries.Height - collisionRect.Height;
+							}
+							break;
+						case CollisionDirection.RIGHT:
+							{
+								orientation = -1;
+								collisionRect.Left = boundaries.Left + boundaries.Width - collisionRect.Width;
+								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
+
+								if (Math.Abs(Speed.X) > 4)
+								{
+									bump.Play();
+								}
+								else
+								{
+									orientation = 1;
+									Speed.X = 0;
+								}
+							}
+							break;
+						case CollisionDirection.LEFT:
+							{
+								orientation = 1;
+								collisionRect.Left = boundaries.Left;
+								Speed.X = orientation * Math.Abs(Speed.X) * 0.9f;
+
+								if (Math.Abs(Speed.X) > 4)
+								{
+									bump.Play();
+								}
+								else
+								{
+									orientation = -1;
+									Speed.X = 0;
+								}
+							}
+							break;
+					}
+				}
+			}
+
+			if (!Grounded)
+			{
+				fall();
+			}
+			else
+			{
+				Speed.Y = Speed.Y < 0 ? Speed.Y : 0;
+			}
 		}
 
-		public int update(int elapsedMilliseconds)
+		public override int update(int elapsedMilliseconds)
 		{
 			switch (state)
 			{
@@ -416,12 +428,26 @@ namespace Game
 				Quote();
 			}
 
+			collisionRect.Left += Speed.X;
+			collisionRect.Top += Speed.Y;
 			collisions();
-			Position += Speed;
-
-			UpdateSprite();
 
 			return 0;
+		}
+
+		public override void Draw(RenderTarget target, RenderStates states)
+		{
+			//Sprite centré. Va falloir trouver une autre facon générique de gérer les hotspots
+			currentSprite.Position = new Vector2f(collisionRect.Left - (collisionRect.Width / 2), collisionRect.Top) + currentSprite.Origin;
+			currentSprite.Rotation = rotation;
+			currentSprite.Scale = new Vector2f(orientation, currentSprite.Scale.Y);  //Flip sprite
+
+			currentSprite.Draw(target, states);
+
+			/*RectangleShape collisionShape = new RectangleShape(new Vector2f(CollisionRect.Width, CollisionRect.Height));
+			collisionShape.Position = new Vector2f(CollisionRect.Left, CollisionRect.Top);
+			collisionShape.FillColor = Color.Yellow;
+			collisionShape.Draw(target, states);*/
 		}
 	}
 }
